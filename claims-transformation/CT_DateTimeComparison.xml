@@ -96,7 +96,6 @@
         <OutputClaim ClaimTypeReferenceId="firstDateToCompare" />
         <OutputClaim ClaimTypeReferenceId="secondDateToCompare" />
         <OutputClaim ClaimTypeReferenceId="ComparisonResult" />
-        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
