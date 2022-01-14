@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_CT_DateTimeComparison" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_DateTimeComparison">
+  PolicyId="B2C_1A_CT_GetCurrentDateTime" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetCurrentDateTime">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,32 +11,16 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="firstDateToCompare">
-        <DisplayName>firstDateToCompare</DisplayName>
+      <ClaimType Id="systemDateTime">
+        <DisplayName>systemDateTime</DisplayName>
         <DataType>dateTime</DataType>
-      </ClaimType>
-      <ClaimType Id="secondDateToCompare">
-        <DisplayName>secondDateToCompare</DisplayName>
-        <DataType>dateTime</DataType>
-      </ClaimType>
-      <ClaimType Id="ComparisonResult">
-        <DisplayName>ComparisonResult</DisplayName>
-        <DataType>boolean</DataType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="CompareDates" TransformationMethod="DateTimeComparison">
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="firstDateToCompare" TransformationClaimType="firstDateTime" />
-          <InputClaim ClaimTypeReferenceId="secondDateToCompare" TransformationClaimType="secondDateTime" />
-        </InputClaims>
-        <InputParameters>
-          <InputParameter Id="operator" DataType="string" Value="later than" />
-          <InputParameter Id="timeSpanInSeconds" DataType="int" Value="7776000" />
-        </InputParameters>
+      <ClaimsTransformation Id="GetSystemDateTime" TransformationMethod="GetCurrentDateTime">
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="ComparisonResult" TransformationClaimType="result" />
+          <OutputClaim ClaimTypeReferenceId="systemDateTime" TransformationClaimType="currentDateTime" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -46,20 +30,14 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="ClaimsTransformation-DateTimeComparison">
+        <TechnicalProfile Id="ClaimsTransformation-GetCurrentDateTime">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="firstDateToCompare" DefaultValue="2022-01-01T00:00:00.100000Z" AlwaysUseDefaultValue="true" />
-            <InputClaim ClaimTypeReferenceId="secondDateToCompare" DefaultValue="2022-03-16T00:00:00.100000Z" AlwaysUseDefaultValue="true" />
-          </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="ComparisonResult" />
-            <OutputClaim ClaimTypeReferenceId="firstDateToCompare" />
-            <OutputClaim ClaimTypeReferenceId="secondDateToCompare" />
+            <OutputClaim ClaimTypeReferenceId="systemDateTime" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CompareDates" />
+            <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -72,7 +50,7 @@
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="ClaimsTransformation-DateTimeComparison" TechnicalProfileReferenceId="ClaimsTransformation-DateTimeComparison" />
+            <ClaimsExchange Id="ClaimsTransformation-GetCurrentDateTime" TechnicalProfileReferenceId="ClaimsTransformation-GetCurrentDateTime" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
@@ -90,9 +68,7 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="firstDateToCompare" />
-        <OutputClaim ClaimTypeReferenceId="secondDateToCompare" />
-        <OutputClaim ClaimTypeReferenceId="ComparisonResult" />
+        <OutputClaim ClaimTypeReferenceId="systemDateTime" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
