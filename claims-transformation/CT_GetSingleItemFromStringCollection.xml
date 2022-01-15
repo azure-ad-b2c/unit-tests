@@ -4,106 +4,106 @@
   PolicyId="B2C_1A_CT_GetSingleItemFromStringCollection"
   PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetSingleItemFromStringCollection">
 
-	<BasePolicy>
-		<TenantId>yourtenant.onmicrosoft.com</TenantId>
-		<PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
-	</BasePolicy>
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
 
-	<BuildingBlocks>
-		<ClaimsSchema>
-			<ClaimType Id="emails">
-				<DisplayName>Emails</DisplayName>
-				<DataType>stringCollection</DataType>
-			</ClaimType>
-			<ClaimType Id="result">
-				<DisplayName>Test result</DisplayName>
-				<DataType>string</DataType>
-			</ClaimType>
-		</ClaimsSchema>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="emails">
+        <DisplayName>Emails</DisplayName>
+        <DataType>stringCollection</DataType>
+      </ClaimType>
+      <ClaimType Id="result">
+        <DisplayName>Test result</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+    </ClaimsSchema>
 
-		<ClaimsTransformations>
-			<ClaimsTransformation Id="AddEmail1" TransformationMethod="AddParameterToStringCollection">
-				<InputClaims>
-					<InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
-				</InputClaims>
-				<InputParameters>
-					<InputParameter Id="item" DataType="string" Value="emily@contoso.com" />
-				</InputParameters>
-				<OutputClaims>
-					<OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
-				</OutputClaims>
-			</ClaimsTransformation>
-			<ClaimsTransformation Id="AddEmail2" TransformationMethod="AddParameterToStringCollection">
-				<InputClaims>
-					<InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
-				</InputClaims>
-				<InputParameters>
-					<InputParameter Id="item" DataType="string" Value="someone@test.com" />
-				</InputParameters>
-				<OutputClaims>
-					<OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
-				</OutputClaims>
-			</ClaimsTransformation>
-			<ClaimsTransformation Id="GetFirstEmail" TransformationMethod="GetSingleItemFromStringCollection">
-				<InputClaims>
-					<InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
-				</InputClaims>
-				<OutputClaims>
-					<OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="extractedItem" />
-				</OutputClaims>
-			</ClaimsTransformation>
-		</ClaimsTransformations>
-	</BuildingBlocks>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="AddEmail1" TransformationMethod="AddParameterToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="item" DataType="string" Value="emily@contoso.com" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="AddEmail2" TransformationMethod="AddParameterToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="item" DataType="string" Value="someone@test.com" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="GetFirstEmail" TransformationMethod="GetSingleItemFromStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="extractedItem" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
 
-	<ClaimsProviders>
-		<ClaimsProvider>
-			<DisplayName>Unit tests</DisplayName>
-			<TechnicalProfiles>
-				<TechnicalProfile Id="ExperimentalTechnicalProfile">
-					<DisplayName>Unit test</DisplayName>
-					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-					<OutputClaims>
-						<OutputClaim ClaimTypeReferenceId="emails" />
-						<OutputClaim ClaimTypeReferenceId="result" />
-					</OutputClaims>
-					<OutputClaimsTransformations>
-						<OutputClaimsTransformation ReferenceId="AddEmail1" />
-						<OutputClaimsTransformation ReferenceId="AddEmail2" />
-						<OutputClaimsTransformation ReferenceId="GetFirstEmail" />
-					</OutputClaimsTransformations>
-					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-				</TechnicalProfile>
-			</TechnicalProfiles>
-		</ClaimsProvider>
-	</ClaimsProviders>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="emails" />
+            <OutputClaim ClaimTypeReferenceId="result" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="AddEmail1" />
+            <OutputClaimsTransformation ReferenceId="AddEmail2" />
+            <OutputClaimsTransformation ReferenceId="GetFirstEmail" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
 
-	<UserJourneys>
-		<UserJourney Id="UnitTestJourney">
-			<OrchestrationSteps>
-				<OrchestrationStep Order="1" Type="ClaimsExchange">
-					<ClaimsExchanges>
-						<ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
-					</ClaimsExchanges>
-				</OrchestrationStep>
-				<OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-			</OrchestrationSteps>
-		</UserJourney>
-	</UserJourneys>
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
 
-	<RelyingParty>
-		<DefaultUserJourney ReferenceId="UnitTestJourney" />
-		<TechnicalProfile Id="PolicyProfile">
-			<DisplayName>PolicyProfile</DisplayName>
-			<Protocol Name="OpenIdConnect" />
-			<OutputClaims>
-				<OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
-				<OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
-				<!-- Unit test claims-->
-				<OutputClaim ClaimTypeReferenceId="emails" />
-				<OutputClaim ClaimTypeReferenceId="result" />
-			</OutputClaims>
-			<SubjectNamingInfo ClaimType="sub" />
-		</TechnicalProfile>
-	</RelyingParty>
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="emails" />
+        <OutputClaim ClaimTypeReferenceId="result" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
 </TrustFrameworkPolicy>
