@@ -47,7 +47,7 @@
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
         <!--Self-asserted technical profile-->
-        <TechnicalProfile Id="SelfAsserted-AssertDateTimeIsGreaterThan">
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>User ID signup</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
@@ -89,7 +89,7 @@
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-AssertDateTimeIsGreaterThan" TechnicalProfileReferenceId="SelfAsserted-AssertDateTimeIsGreaterThan" />
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
