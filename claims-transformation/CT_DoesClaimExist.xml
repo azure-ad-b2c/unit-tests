@@ -150,6 +150,7 @@
             <OutputClaimsTransformation ReferenceId="CheckDate" />
             <OutputClaimsTransformation ReferenceId="sCheckStringCollection" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>

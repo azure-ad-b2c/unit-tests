@@ -71,6 +71,7 @@
             <OutputClaimsTransformation ReferenceId="CopyInt" />
             <OutputClaimsTransformation ReferenceId="CopyString" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>

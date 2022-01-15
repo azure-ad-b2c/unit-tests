@@ -45,6 +45,7 @@
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="NotBooleanClaim" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>

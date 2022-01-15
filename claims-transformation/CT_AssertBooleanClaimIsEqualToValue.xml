@@ -61,7 +61,7 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="ExperimentalValidation" />
           </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialSignup" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
         <!--Validation technical profile-->

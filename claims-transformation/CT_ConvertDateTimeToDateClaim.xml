@@ -54,6 +54,7 @@
             <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
             <OutputClaimsTransformation ReferenceId="ConvertToDate" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>

@@ -59,6 +59,7 @@
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GenerateHash" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>

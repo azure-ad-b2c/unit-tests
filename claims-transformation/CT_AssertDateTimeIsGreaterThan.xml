@@ -65,7 +65,7 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="ClaimsTransformation-AssertDateTimeIsGreaterThan" />
           </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialSignup" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
         <!--Validation technical profile-->
