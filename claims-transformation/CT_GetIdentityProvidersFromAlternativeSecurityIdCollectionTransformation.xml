@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_CT_AGetIdentityProvidersFromAlternativeSecurityIdCollectionTransformation"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_AGetIdentityProvidersFromAlternativeSecurityIdCollectionTransformation">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="issuerUserId2">
+        <DisplayName>issuerUserId2</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="identityProvider2">
+        <DisplayName>identityProvider2</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="alternativeSecurityId2">
+        <DisplayName>alternativeSecurityId2</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="AlternativeSecurityIds">
+        <DisplayName>AlternativeSecurityIds collection</DisplayName>
+        <DataType>alternativeSecurityIdCollection</DataType>
+      </ClaimType>
+      <ClaimType Id="result">
+        <DisplayName>Test result</DisplayName>
+        <DataType>stringCollection</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateFirstAlternativeSecurityId" TransformationMethod="CreateAlternativeSecurityId">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerUserId" TransformationClaimType="key" />
+          <InputClaim ClaimTypeReferenceId="identityProvider" TransformationClaimType="identityProvider" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="alternativeSecurityId" TransformationClaimType="alternativeSecurityId" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CreateSecondAlternativeSecurityId" TransformationMethod="CreateAlternativeSecurityId">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerUserId2" TransformationClaimType="key" />
+          <InputClaim ClaimTypeReferenceId="identityProvider2" TransformationClaimType="identityProvider" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="alternativeSecurityId2" TransformationClaimType="alternativeSecurityId" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="AddFirstAlternativeSecurityId" TransformationMethod="AddItemToAlternativeSecurityIdCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="alternativeSecurityId" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="AlternativeSecurityIds" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="AlternativeSecurityIds" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="AddSecondAlternativeSecurityId" TransformationMethod="AddItemToAlternativeSecurityIdCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="alternativeSecurityId2" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="AlternativeSecurityIds" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="AlternativeSecurityIds" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="ExtractIdentityProviders" TransformationMethod="GetIdentityProvidersFromAlternativeSecurityIdCollectionTransformation">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="alternativeSecurityIds" TransformationClaimType="alternativeSecurityIdCollection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="identityProvidersCollection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="issuerUserId" DefaultValue="12345" />
+            <InputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="Facebook.com" />
+            <InputClaim ClaimTypeReferenceId="issuerUserId2" DefaultValue="abcde" />
+            <InputClaim ClaimTypeReferenceId="identityProvider2" DefaultValue="live.com" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserId2" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider2" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateFirstAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateSecondAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="AddFirstAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="AddSecondAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="ExtractIdentityProviders" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="issuerUserId" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="issuerUserId2" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider2" />
+        <OutputClaim ClaimTypeReferenceId="alternativeSecurityId" />
+        <OutputClaim ClaimTypeReferenceId="alternativeSecurityId2" />
+        <OutputClaim ClaimTypeReferenceId="AlternativeSecurityIds" />
+        <OutputClaim ClaimTypeReferenceId="result" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
