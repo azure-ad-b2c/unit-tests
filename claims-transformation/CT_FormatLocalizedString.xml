@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_CT_FormatLocalizedString"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_FormatLocalizedString">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="string1">
+        <DisplayName>string1</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="string2">
+        <DisplayName>string2</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="string3">
+        <DisplayName>string3</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="result">
+        <DisplayName>Result</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="SetResponseMessage" TransformationMethod="FormatLocalizedString">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string1" />
+          <InputClaim ClaimTypeReferenceId="string2" />
+          <InputClaim ClaimTypeReferenceId="string3" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormatId" DataType="string" Value="ResponseMessge_EmailExists" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+
+    <ContentDefinitions>
+      <ContentDefinition Id="api.selfasserted">
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.en" />
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.es" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+    </ContentDefinitions>
+
+    <Localization Enabled="true">
+      <!-- <SupportedLanguages DefaultLanguage="en" MergeBehavior="Append">
+        <SupportedLanguage>en</SupportedLanguage>
+        <SupportedLanguage>es</SupportedLanguage>
+      </SupportedLanguages> -->
+
+      <LocalizedResources Id="api.selfasserted.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="FormatLocalizedStringTransformationClaimType" StringId="ResponseMessge_EmailExists">Format localized string sample: '{0}', '{1}', '{2}'</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.selfasserted.es">
+        <LocalizedStrings>
+          <LocalizedString ElementType="FormatLocalizedStringTransformationClaimType" StringId="ResponseMessge_EmailExists">Formato de muestra de cadena localizada : '{0}', '{1}', '{2}'</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+    </Localization>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="1@test.com" />
+            <InputClaim ClaimTypeReferenceId="string2" DefaultValue="2@test.com" />
+            <InputClaim ClaimTypeReferenceId="string3" DefaultValue="3@test.com" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="string1" />
+            <OutputClaim ClaimTypeReferenceId="string2" />
+            <OutputClaim ClaimTypeReferenceId="string3" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="SetResponseMessage" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="string1" />
+        <OutputClaim ClaimTypeReferenceId="string2" />
+        <OutputClaim ClaimTypeReferenceId="string3" />
+        <OutputClaim ClaimTypeReferenceId="result" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
