@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CR_OIDC_claim_resolvers" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CR_OIDC_claim_resolvers">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="CultureLanguageName">
+        <DisplayName>{Culture:LanguageName}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="CultureLCID">
+        <DisplayName>{Culture:LCID}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="CultureRegionName">
+        <DisplayName>{Culture:RegionName}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="CultureRFC5646">
+        <DisplayName>{Culture:RFC5646}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="PolicyPolicyId">
+        <DisplayName>{Policy:PolicyId}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="PolicyRelyingPartyTenantId">
+        <DisplayName>{Policy:RelyingPartyTenantId}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="PolicyTenantObjectId">
+        <DisplayName>{Policy:TenantObjectId}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="PolicyTrustFrameworkTenantId">
+        <DisplayName>{Policy:TrustFrameworkTenantId}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="ContextBuildNumber">
+        <DisplayName>{Context:BuildNumber}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="ContextCorrelationId">
+        <DisplayName>{Context:CorrelationId}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="ContextDateTimeInUtc">
+        <DisplayName>{Context:DateTimeInUtc}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="ContextDeploymentMode">
+        <DisplayName>{Context:DeploymentMode}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="ContextIPAddress">
+        <DisplayName>{Context:IPAddress}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="serviceTe">
+        <DisplayName>{service:te}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="ContextKMSI">
+        <DisplayName>{CONTEXT:KMSI}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="ContextHostName">
+        <DisplayName>{CONTEXT:HostName}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+      <!-- Protocol claims resolvers-->
+      <ClaimType Id="OIDCAuthenticationContextReferences">
+        <DisplayName>{OIDC:AuthenticationContextReferences}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCClientId">
+        <DisplayName>{OIDC:ClientId}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCDomainHint">
+        <DisplayName>{OIDC:DomainHint}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCLoginHint">
+        <DisplayName>{OIDC:LoginHint}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCMaxAge">
+        <DisplayName>{OIDC:MaxAge}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCNonce">
+        <DisplayName>{OIDC:Nonce}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCPrompt">
+        <DisplayName>{OIDC:Prompt}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCResource">
+        <DisplayName>{OIDC:Resource}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCscope">
+        <DisplayName>{OIDC:scope}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OIDCstate">
+        <DisplayName>{OIDC:state}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="OidcRedirectUri">
+        <DisplayName>{OIDC:RedirectUri}</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+        <OutputClaim ClaimTypeReferenceId="CultureLanguageName" AlwaysUseDefaultValue="true" DefaultValue="{Culture:LanguageName}" />
+        <OutputClaim ClaimTypeReferenceId="CultureLCID" AlwaysUseDefaultValue="true" DefaultValue="{Culture:LCID}" />
+        <OutputClaim ClaimTypeReferenceId="CultureRegionName" AlwaysUseDefaultValue="true" DefaultValue="{Culture:RegionName}" />
+        <OutputClaim ClaimTypeReferenceId="CultureRFC5646" AlwaysUseDefaultValue="true" DefaultValue="{Culture:RFC5646}" />
+        <OutputClaim ClaimTypeReferenceId="PolicyPolicyId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:PolicyId}" />
+        <OutputClaim ClaimTypeReferenceId="PolicyRelyingPartyTenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:RelyingPartyTenantId}" />
+        <OutputClaim ClaimTypeReferenceId="PolicyTenantObjectId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+        <OutputClaim ClaimTypeReferenceId="PolicyTrustFrameworkTenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TrustFrameworkTenantId}" />
+        <OutputClaim ClaimTypeReferenceId="ContextBuildNumber" AlwaysUseDefaultValue="true" DefaultValue="{Context:BuildNumber}" />
+        <OutputClaim ClaimTypeReferenceId="ContextCorrelationId" AlwaysUseDefaultValue="true" DefaultValue="{Context:CorrelationId}" />
+        <OutputClaim ClaimTypeReferenceId="ContextDateTimeInUtc" AlwaysUseDefaultValue="true" DefaultValue="{Context:DateTimeInUtc}" />
+        <OutputClaim ClaimTypeReferenceId="ContextDeploymentMode" AlwaysUseDefaultValue="true" DefaultValue="{Context:DeploymentMode}" />
+        <OutputClaim ClaimTypeReferenceId="ContextIPAddress" AlwaysUseDefaultValue="true" DefaultValue="{Context:IPAddress}" />
+        <OutputClaim ClaimTypeReferenceId="ContextHostName" AlwaysUseDefaultValue="true" DefaultValue="{Context:HostName}" />
+        <OutputClaim ClaimTypeReferenceId="serviceTe" AlwaysUseDefaultValue="true" DefaultValue="{service:te}" />
+        <OutputClaim ClaimTypeReferenceId="ContextKMSI" AlwaysUseDefaultValue="true" DefaultValue="{CONTEXT:KMSI}" />
+
+        <OutputClaim ClaimTypeReferenceId="OIDCAuthenticationContextReferences" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:AuthenticationContextReferences}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCClientId" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:ClientId}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCDomainHint" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:DomainHint}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCLoginHint" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:LoginHint}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCMaxAge" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:MaxAge}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCNonce" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Nonce}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCPrompt" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Prompt}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCResource" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Resource}" />
+        <OutputClaim ClaimTypeReferenceId="OIDCscope" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:scope}" />
+        <!-- <OutputClaim ClaimTypeReferenceId="OIDCstate" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:state}" /> -->
+        <OutputClaim ClaimTypeReferenceId="OidcRedirectUri" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:RedirectUri}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
