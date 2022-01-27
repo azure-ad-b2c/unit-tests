@@ -48,7 +48,7 @@
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="stringToHash" DefaultValue="Helo world" />
+            <InputClaim ClaimTypeReferenceId="stringToHash" DefaultValue="Hello world" />
             <InputClaim ClaimTypeReferenceId="salt" DefaultValue="mySaltValue" />
           </InputClaims>
           <OutputClaims>
