@@ -1,0 +1,16 @@
+on: push
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 'Upload TrustFrameworkBase Policy'
+      uses: azure-ad-b2c/deploy-trustframework-policy@v5
+      with:
+        folder: "./claims-transformation/date"
+        files: "*"
+        tenant: ${{ secrets.tenant }}
+        clientId: ${{ secrets.clientId }}
+        clientSecret: ${{ secrets.clientSecret }}
