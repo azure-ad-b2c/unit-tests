@@ -12,7 +12,7 @@ The unit test defines the following elements:
 - **ExperimentalValidation** - [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile) type of [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile). This validation technical profile invokes the **AssertDates** claims transformation, which runs the assertion.
 - **AssertDates** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_AssertDateTimeIsGreaterThan/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#assertdatetimeisgreaterthan)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_AssertDateTimeIsGreaterThan/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![documentation](../../media/doc.png) [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#assertdatetimeisgreaterthan)
 
 ## ConvertDateTimeToDateClaim
 
@@ -24,7 +24,7 @@ The unit test defines the following elements:
 - **GetSystemDateTime** claims transformation - Set default value to the `dateTimeClaims` claim using [GetCurrentDateTime](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#getcurrentdatetime) claims transformation.
 - **ConvertToDate** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_ConvertDateTimeToDateClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#convertdatetimetodateclaim)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_ConvertDateTimeToDateClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![documentation](../../media/doc.png) [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#convertdatetimetodateclaim)
 
 ## ConvertDateToDateTimeClaim
 
@@ -35,7 +35,7 @@ The unit test defines the following elements:
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `dateClaim` claim with default value (you can change the value). Then it calls the **ConvertToDateTime** output claims transformation to convert the date to dateTime.
 - **ConvertToDateTime** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_ConvertDateToDateTimeClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#convertdatetodatetimeclaim)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_ConvertDateToDateTimeClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![documentation](../../media/doc.png) [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#convertdatetodatetimeclaim)
 
 ## DateTimeComparison
 
@@ -47,7 +47,7 @@ The unit test defines the following elements:
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **CompareDates** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_DateTimeComparison/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#datetimecomparison)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_DateTimeComparison/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![documentation](../../media/doc.png) [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#datetimecomparison)
 
 ## GetCurrentDateTime
 
@@ -58,7 +58,7 @@ The unit test defines the following elements:
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile first calls the **GetResult** input claims transformation. Then, shows the `result` claim with the current date time.
 - **GetResult** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetCurrentDateTime/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#getcurrentdatetime)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetCurrentDateTime/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![documentation](../../media/doc.png) [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#getcurrentdatetime)
 
 ## IsTermsOfUseConsentRequired
 
@@ -70,4 +70,4 @@ The unit test defines the following elements:
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **CompareDates** claims transformation - the unit test. The `2022-01-15T00:00:00` date is configure in this claims transformation.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_IsTermsOfUseConsentRequired/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#istermsofuseconsentrequired)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_IsTermsOfUseConsentRequired/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![documentation](../../media/doc.png) [documentation](https://docs.microsoft.com/azure/active-directory-b2c/date-transformations#istermsofuseconsentrequired)
