@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
-  TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_CT_AssertDateTimeIsGreaterThan" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_AssertDateTimeIsGreaterThan">
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_CT_AssertDateTimeIsGreaterThan" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_AssertDateTimeIsGreaterThan">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,18 +11,18 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="leftDateToCompare">
-        <DisplayName>Left date to compare</DisplayName>
+      <ClaimType Id="date1">
+        <DisplayName>Left date to compare (date1)</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="rightDateToCompare">
-        <DisplayName>Ritht date to compare</DisplayName>
+      <ClaimType Id="date2">
+        <DisplayName>Right date to compare (date2)</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="ComparisonResult">
-        <DisplayName>ComparisonResult</DisplayName>
+      <ClaimType Id="result">
+        <DisplayName>result</DisplayName>
         <DataType>boolean</DataType>
       </ClaimType>
     </ClaimsSchema>
@@ -30,13 +30,13 @@
     <ClaimsTransformations>
       <ClaimsTransformation Id="AssertDates" TransformationMethod="AssertDateTimeIsGreaterThan">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="leftDateToCompare" TransformationClaimType="leftOperand" />
-          <InputClaim ClaimTypeReferenceId="rightDateToCompare" TransformationClaimType="rightOperand" />
+          <InputClaim ClaimTypeReferenceId="date1" TransformationClaimType="leftOperand" />
+          <InputClaim ClaimTypeReferenceId="date2" TransformationClaimType="rightOperand" />
         </InputClaims>
         <InputParameters>
           <InputParameter Id="AssertIfEqualTo" DataType="boolean" Value="true" />
-          <InputParameter Id="AssertIfRightOperandIsNotPresent" DataType="boolean" Value="true" />
-          <InputParameter Id="TreatAsEqualIfWithinMillseconds" DataType="int" Value="300000" />
+          <InputParameter Id="AssertIfRightOperandIsNotPresent" DataType="boolean" Value="false" />
+          <InputParameter Id="TreatAsEqualIfWithinMillseconds" DataType="int" Value="60" />
         </InputParameters>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -52,15 +52,15 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-            <Item Key="DateTimeGreaterThan">Custom error message if the provided right operand is greater than the right operand.</Item>
+            <Item Key="DateTimeGreaterThan">Error date2 is greater than date1.</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="leftDateToCompare" DefaultValue="2022-01-01T00:00:00" AlwaysUseDefaultValue="true" />
-            <InputClaim ClaimTypeReferenceId="rightDateToCompare" DefaultValue="2022-03-16T00:00:00" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="date1" DefaultValue="2022-01-01T00:00:00" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="date2" DefaultValue="2022-03-16T00:00:00" AlwaysUseDefaultValue="true" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="leftDateToCompare" />
-            <OutputClaim ClaimTypeReferenceId="rightDateToCompare" />
+            <OutputClaim ClaimTypeReferenceId="date1" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="date2" Required="true" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="ClaimsTransformation-AssertDateTimeIsGreaterThan" />
@@ -73,7 +73,7 @@
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="ComparisonResult" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="result" DefaultValue="false" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="AssertDates" />
@@ -107,8 +107,8 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="leftDateToCompare" />
-        <OutputClaim ClaimTypeReferenceId="rightDateToCompare" />
+        <OutputClaim ClaimTypeReferenceId="date1" />
+        <OutputClaim ClaimTypeReferenceId="date2" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

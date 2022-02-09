@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
-  TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_CT_ConvertDateToDateTimeClaim" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ConvertDateToDateTimeClaim">
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_CT_ConvertDateToDateTimeClaim" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ConvertDateToDateTimeClaim">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -12,12 +12,14 @@
   <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="dateClaim">
-        <DisplayName>firstDateToCompare</DisplayName>
+        <DisplayName>Date claim type (dateClaim)</DisplayName>
         <DataType>date</DataType>
+        <UserInputType>DateTimeDropdown</UserInputType>
       </ClaimType>
-      <ClaimType Id="dateTimeClaims">
-        <DisplayName>secondDateToCompare</DisplayName>
+      <ClaimType Id="result">
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>dateTime</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -27,7 +29,7 @@
           <InputClaim ClaimTypeReferenceId="dateClaim" TransformationClaimType="inputClaim" />
         </InputClaims>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="dateTimeClaims" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -37,19 +39,37 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="dateClaim" DefaultValue="2022-01-01" AlwaysUseDefaultValue="true" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="dateClaim" />
-            <OutputClaim ClaimTypeReferenceId="dateTimeClaims" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="ConvertToDateTime" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="result" />
+          </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -64,7 +84,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -80,7 +105,7 @@
 
         <!-- Unit test claims-->
         <OutputClaim ClaimTypeReferenceId="dateClaim" />
-        <OutputClaim ClaimTypeReferenceId="dateTimeClaims" />
+        <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

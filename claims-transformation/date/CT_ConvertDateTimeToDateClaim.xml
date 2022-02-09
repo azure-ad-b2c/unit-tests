@@ -1,25 +1,40 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_ChangeCase"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ChangeCase">
-
+    TenantId="yourtenant.onmicrosoft.com"
+    PolicyId="B2C_1A_CT_ConvertDateTimeToDateClaim"
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ConvertDateTimeToDateClaim">
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
   <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="dateTimeClaims">
+        <DisplayName>Current date and time (dateTimeClaims)</DisplayName>
+        <DataType>dateTime</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="result">
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
+        <DataType>date</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
     <ClaimsTransformations>
-      <ClaimsTransformation Id="ChangeEmailToLower" TransformationMethod="ChangeCase">
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="inputClaim1" />
-        </InputClaims>
-        <InputParameters>
-          <InputParameter Id="toCase" DataType="string" Value="LOWER" />
-        </InputParameters>
+      <ClaimsTransformation Id="GetSystemDateTime" TransformationMethod="GetCurrentDateTime">
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="email" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="dateTimeClaims" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="ConvertToDate" TransformationMethod="ConvertDateTimeToDateClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="dateTimeClaims" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -31,16 +46,22 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetSystemDateTime" />
+            <InputClaimsTransformation ReferenceId="ConvertToDate" />
+          </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="email" DefaultValue="SomeOne@Contoso.COM" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="dateTimeClaims" />
+            <InputClaim ClaimTypeReferenceId="result" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="email" />
+            <OutputClaim ClaimTypeReferenceId="dateTimeClaims" />
+            <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="ChangeEmailToLower" />
-          </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -70,7 +91,8 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="result" />
+        <OutputClaim ClaimTypeReferenceId="dateTimeClaims" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

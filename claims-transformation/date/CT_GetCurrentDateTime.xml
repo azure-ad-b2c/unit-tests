@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_ConvertDateTimeToDateClaim"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_ConvertDateTimeToDateClaim">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_CT_GetCurrentDateTime" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetCurrentDateTime">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,29 +11,17 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="dateClaim">
-        <DisplayName>firstDateToCompare</DisplayName>
-        <DataType>date</DataType>
-      </ClaimType>
-      <ClaimType Id="dateTimeClaims">
-        <DisplayName>secondDateToCompare</DisplayName>
+      <ClaimType Id="result">
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>dateTime</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="GetSystemDateTime" TransformationMethod="GetCurrentDateTime">
+      <ClaimsTransformation Id="Getresult" TransformationMethod="GetCurrentDateTime">
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="dateTimeClaims" TransformationClaimType="currentDateTime" />
-        </OutputClaims>
-      </ClaimsTransformation>
-
-      <ClaimsTransformation Id="ConvertToDate" TransformationMethod="ConvertDateTimeToDateClaim">
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="dateTimeClaims" TransformationClaimType="inputClaim" />
-        </InputClaims>
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="dateClaim" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="currentDateTime" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -45,15 +33,19 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="Getresult" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="dateClaim" />
-            <OutputClaim ClaimTypeReferenceId="dateTimeClaims" />
+            <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
-            <OutputClaimsTransformation ReferenceId="ConvertToDate" />
-          </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -83,8 +75,7 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="dateClaim" />
-        <OutputClaim ClaimTypeReferenceId="dateTimeClaims" />
+        <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
