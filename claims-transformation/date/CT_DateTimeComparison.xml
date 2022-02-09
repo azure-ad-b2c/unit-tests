@@ -24,7 +24,7 @@
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>boolean</DataType>
-        <UserInputType>Paragraph</UserInputType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -36,7 +36,7 @@
         </InputClaims>
         <InputParameters>
           <InputParameter Id="operator" DataType="string" Value="later than" />
-          <InputParameter Id="timeSpanInSeconds" DataType="int" Value="0" />
+          <InputParameter Id="timeSpanInSeconds" DataType="int" Value="5" />
         </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="result" />
@@ -77,13 +77,9 @@
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="dateTime1" />
-            <InputClaim ClaimTypeReferenceId="dateTime2" />
             <InputClaim ClaimTypeReferenceId="result" />
           </InputClaims>
           <DisplayClaims>
-            <DisplayClaim ClaimTypeReferenceId="dateTime1" />
-            <DisplayClaim ClaimTypeReferenceId="dateTime2" />
             <DisplayClaim ClaimTypeReferenceId="result" />
           </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />

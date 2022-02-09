@@ -34,9 +34,9 @@
           <InputClaim ClaimTypeReferenceId="date2" TransformationClaimType="rightOperand" />
         </InputClaims>
         <InputParameters>
-          <InputParameter Id="AssertIfEqualTo" DataType="boolean" Value="true" />
+          <InputParameter Id="AssertIfEqualTo" DataType="boolean" Value="false" />
           <InputParameter Id="AssertIfRightOperandIsNotPresent" DataType="boolean" Value="false" />
-          <InputParameter Id="TreatAsEqualIfWithinMillseconds" DataType="int" Value="60" />
+          <InputParameter Id="TreatAsEqualIfWithinMillseconds" DataType="int" Value="30000" />
         </InputParameters>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -63,13 +63,13 @@
             <OutputClaim ClaimTypeReferenceId="date2" Required="true" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="ClaimsTransformation-AssertDateTimeIsGreaterThan" />
+            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation" />
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
         <!--Validation technical profile-->
-        <TechnicalProfile Id="ClaimsTransformation-AssertDateTimeIsGreaterThan">
+        <TechnicalProfile Id="ExperimentalValidation">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
