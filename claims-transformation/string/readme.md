@@ -73,7 +73,11 @@ The unit test defines the following elements:
 
 ## CopyClaimIfPredicateMatch
 
-Tries to copy the `string1` claim value to `result` claim. It will copy the value only if the `string1` is in international phone number format, as configured in the **internationalOrNationalPhoneNumber** predicate. The unit test defines the following elements:
+Tries to copy the `string1` claim value to `result` claim. It will copy the value only if the `string1` is in international phone number format, as configured in the **internationalOrNationalPhoneNumber** predicate. 
+
+When you provide a valid phone number, the claim will be copy to the result. When you select *Continue* you will see the exact same value on the result page. But if you provide any string, such as email address, the result claim will be empty. 
+
+The unit test defines the following elements:
 
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with default values (you can change the values). The output claims transformation **SetResultIfPredicateMatch** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
