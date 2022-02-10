@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CR_Policy" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CR_Policy">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="PolicyPolicyId">
+        <DisplayName>{Policy:PolicyId}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="PolicyRelyingPartyTenantId">
+        <DisplayName>{Policy:RelyingPartyTenantId}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="PolicyTenantObjectId">
+        <DisplayName>{Policy:TenantObjectId}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="PolicyTrustFrameworkTenantId">
+        <DisplayName>{Policy:TrustFrameworkTenantId}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="PolicyPolicyId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:PolicyId}" />
+            <InputClaim ClaimTypeReferenceId="PolicyRelyingPartyTenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:RelyingPartyTenantId}" />
+            <InputClaim ClaimTypeReferenceId="PolicyTenantObjectId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+            <InputClaim ClaimTypeReferenceId="PolicyTrustFrameworkTenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TrustFrameworkTenantId}" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="PolicyPolicyId" />
+            <OutputClaim ClaimTypeReferenceId="PolicyRelyingPartyTenantId" />
+            <OutputClaim ClaimTypeReferenceId="PolicyTenantObjectId" />
+            <OutputClaim ClaimTypeReferenceId="PolicyTrustFrameworkTenantId" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="PolicyPolicyId" />
+        <OutputClaim ClaimTypeReferenceId="PolicyRelyingPartyTenantId" />
+        <OutputClaim ClaimTypeReferenceId="PolicyTenantObjectId" />
+        <OutputClaim ClaimTypeReferenceId="PolicyTrustFrameworkTenantId" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

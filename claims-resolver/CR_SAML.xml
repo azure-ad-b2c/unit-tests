@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CR_SAML" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CR_SAML">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="SAMLAuthnContextClassReferences">
+        <DisplayName>{SAML:AuthnContextClassReferences}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLNameIdPolicyFormat">
+        <DisplayName>{SAML:NameIdPolicyFormat}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLIssuer">
+        <DisplayName>{SAML:Issuer}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLAllowCreate">
+        <DisplayName>{SAML:AllowCreate}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLForceAuthn">
+        <DisplayName>{SAML:ForceAuthn}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLProviderName">
+        <DisplayName>{SAML:ProviderName}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLRelayState">
+        <DisplayName>{SAML:RelayState}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLSubject">
+        <DisplayName>{SAML:Subject}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="SAMLBinding">
+        <DisplayName>{SAML:Binding}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="SAMLAllowCreate" AlwaysUseDefaultValue="true" DefaultValue="{SAML:AllowCreate}" />
+            <InputClaim ClaimTypeReferenceId="SAMLAuthnContextClassReferences" AlwaysUseDefaultValue="true" DefaultValue="{SAML:AuthnContextClassReferences}" />
+            <InputClaim ClaimTypeReferenceId="SAMLBinding" AlwaysUseDefaultValue="true" DefaultValue="{SAML:Binding}" />
+            <InputClaim ClaimTypeReferenceId="SAMLForceAuthn" AlwaysUseDefaultValue="true" DefaultValue="{SAML:ForceAuthn}" />
+            <InputClaim ClaimTypeReferenceId="SAMLIssuer" AlwaysUseDefaultValue="true" DefaultValue="{SAML:Issuer}" />
+            <InputClaim ClaimTypeReferenceId="SAMLNameIdPolicyFormat" AlwaysUseDefaultValue="true" DefaultValue="{SAML:NameIdPolicyFormat}" />
+            <InputClaim ClaimTypeReferenceId="SAMLProviderName" AlwaysUseDefaultValue="true" DefaultValue="{SAML:ProviderName}" />
+            <InputClaim ClaimTypeReferenceId="SAMLRelayState" AlwaysUseDefaultValue="true" DefaultValue="{SAML:RelayState}" />
+            <InputClaim ClaimTypeReferenceId="SAMLSubject" AlwaysUseDefaultValue="true" DefaultValue="{SAML:Subject}" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="SAMLAllowCreate" />
+            <OutputClaim ClaimTypeReferenceId="SAMLAuthnContextClassReferences" />
+            <OutputClaim ClaimTypeReferenceId="SAMLBinding" />
+            <OutputClaim ClaimTypeReferenceId="SAMLForceAuthn" />
+            <OutputClaim ClaimTypeReferenceId="SAMLIssuer" />
+            <OutputClaim ClaimTypeReferenceId="SAMLNameIdPolicyFormat" />
+            <OutputClaim ClaimTypeReferenceId="SAMLProviderName" />
+            <OutputClaim ClaimTypeReferenceId="SAMLRelayState" />
+            <OutputClaim ClaimTypeReferenceId="SAMLSubject" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Token Issuer</DisplayName>
+      <TechnicalProfiles>
+
+        <!-- SAML Token Issuer technical profile -->
+        <TechnicalProfile Id="Saml2AssertionIssuer">
+          <DisplayName>Token Issuer</DisplayName>
+          <Protocol Name="SAML2" />
+          <OutputTokenFormat>SAML2</OutputTokenFormat>
+          <Metadata>
+            <Item Key="IssuerUri">https://issuerUriMyAppExpects</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="SamlAssertionSigning" StorageReferenceId="B2C_1A_SelfSignedCert" />
+            <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_SelfSignedCert" />
+          </CryptographicKeys>
+          <InputClaims />
+          <OutputClaims />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Saml-issuer" />
+        </TechnicalProfile>
+
+        <!-- Session management technical profile for SAML-based tokens -->
+        <TechnicalProfile Id="SM-Saml-issuer">
+          <DisplayName>Session Management Provider</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.SamlSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="Saml2AssertionIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="SAML2" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="objectId" DefaultValue="1234" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="SAMLAllowCreate" />
+        <OutputClaim ClaimTypeReferenceId="SAMLAuthnContextClassReferences" />
+        <OutputClaim ClaimTypeReferenceId="SAMLBinding" />
+        <OutputClaim ClaimTypeReferenceId="SAMLForceAuthn" />
+        <OutputClaim ClaimTypeReferenceId="SAMLIssuer" />
+        <OutputClaim ClaimTypeReferenceId="SAMLNameIdPolicyFormat" />
+        <OutputClaim ClaimTypeReferenceId="SAMLProviderName" />
+        <OutputClaim ClaimTypeReferenceId="SAMLRelayState" />
+        <OutputClaim ClaimTypeReferenceId="SAMLSubject" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="objectId" ExcludeAsClaim="true" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

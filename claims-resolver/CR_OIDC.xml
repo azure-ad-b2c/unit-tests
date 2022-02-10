@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CR_OIDC" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CR_OIDC">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="OIDCAuthenticationContextReferences">
+        <DisplayName>{OIDC:AuthenticationContextReferences}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCClientId">
+        <DisplayName>{OIDC:ClientId}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCDomainHint">
+        <DisplayName>{OIDC:DomainHint}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCLoginHint">
+        <DisplayName>{OIDC:LoginHint}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCMaxAge">
+        <DisplayName>{OIDC:MaxAge}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCNonce">
+        <DisplayName>{OIDC:Nonce}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCPrompt">
+        <DisplayName>{OIDC:Prompt}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCResource">
+        <DisplayName>{OIDC:Resource}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCscope">
+        <DisplayName>{OIDC:scope}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OIDCstate">
+        <DisplayName>{OIDC:state}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="OidcRedirectUri">
+        <DisplayName>{OIDC:RedirectUri}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="OIDCAuthenticationContextReferences" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:AuthenticationContextReferences}" />
+            <InputClaim ClaimTypeReferenceId="OIDCClientId" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:ClientId}" />
+            <InputClaim ClaimTypeReferenceId="OIDCDomainHint" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:DomainHint}" />
+            <InputClaim ClaimTypeReferenceId="OIDCLoginHint" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:LoginHint}" />
+            <InputClaim ClaimTypeReferenceId="OIDCMaxAge" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:MaxAge}" />
+            <InputClaim ClaimTypeReferenceId="OIDCNonce" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Nonce}" />
+            <InputClaim ClaimTypeReferenceId="OIDCPrompt" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Prompt}" />
+            <InputClaim ClaimTypeReferenceId="OIDCResource" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Resource}" />
+            <InputClaim ClaimTypeReferenceId="OIDCscope" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:scope}" />
+            <!-- <InputClaim ClaimTypeReferenceId="OIDCstate" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:state}" /> -->
+            <InputClaim ClaimTypeReferenceId="OidcRedirectUri" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:RedirectUri}" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="OIDCAuthenticationContextReferences" />
+            <OutputClaim ClaimTypeReferenceId="OIDCClientId" />
+            <OutputClaim ClaimTypeReferenceId="OIDCDomainHint" />
+            <OutputClaim ClaimTypeReferenceId="OIDCLoginHint" />
+            <OutputClaim ClaimTypeReferenceId="OIDCMaxAge" />
+            <OutputClaim ClaimTypeReferenceId="OIDCNonce" />
+            <OutputClaim ClaimTypeReferenceId="OIDCPrompt" />
+            <OutputClaim ClaimTypeReferenceId="OIDCResource" />
+            <OutputClaim ClaimTypeReferenceId="OIDCscope" />
+            <!-- <OutputClaim ClaimTypeReferenceId="OIDCstate"  /> -->
+            <OutputClaim ClaimTypeReferenceId="OidcRedirectUri" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="OIDCAuthenticationContextReferences" />
+        <OutputClaim ClaimTypeReferenceId="OIDCClientId" />
+        <OutputClaim ClaimTypeReferenceId="OIDCDomainHint" />
+        <OutputClaim ClaimTypeReferenceId="OIDCLoginHint" />
+        <OutputClaim ClaimTypeReferenceId="OIDCMaxAge" />
+        <OutputClaim ClaimTypeReferenceId="OIDCNonce" />
+        <OutputClaim ClaimTypeReferenceId="OIDCPrompt" />
+        <OutputClaim ClaimTypeReferenceId="OIDCResource" />
+        <OutputClaim ClaimTypeReferenceId="OIDCscope" />
+        <!-- <OutputClaim ClaimTypeReferenceId="OIDCstate"  /> -->
+        <OutputClaim ClaimTypeReferenceId="OidcRedirectUri" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

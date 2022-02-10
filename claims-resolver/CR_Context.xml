@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CR_Context" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CR_Context">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="ContextBuildNumber">
+        <DisplayName>{Context:BuildNumber}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ContextCorrelationId">
+        <DisplayName>{Context:CorrelationId}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ContextDateTimeInUtc">
+        <DisplayName>{Context:DateTimeInUtc}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ContextDeploymentMode">
+        <DisplayName>{Context:DeploymentMode}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ContextIPAddress">
+        <DisplayName>{Context:IPAddress}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ContextKMSI">
+        <DisplayName>{Context:KMSI}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ContextHostName">
+        <DisplayName>{Context:HostName}</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="ContextBuildNumber" AlwaysUseDefaultValue="true" DefaultValue="{Context:BuildNumber}" />
+            <InputClaim ClaimTypeReferenceId="ContextCorrelationId" AlwaysUseDefaultValue="true" DefaultValue="{Context:CorrelationId}" />
+            <InputClaim ClaimTypeReferenceId="ContextDateTimeInUtc" AlwaysUseDefaultValue="true" DefaultValue="{Context:DateTimeInUtc}" />
+            <InputClaim ClaimTypeReferenceId="ContextDeploymentMode" AlwaysUseDefaultValue="true" DefaultValue="{Context:DeploymentMode}" />
+            <InputClaim ClaimTypeReferenceId="ContextIPAddress" AlwaysUseDefaultValue="true" DefaultValue="{Context:IPAddress}" />
+            <InputClaim ClaimTypeReferenceId="ContextHostName" AlwaysUseDefaultValue="true" DefaultValue="{Context:HostName}" />
+            <InputClaim ClaimTypeReferenceId="ContextKMSI" AlwaysUseDefaultValue="true" DefaultValue="{CONTEXT:KMSI}" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="ContextBuildNumber" />
+            <OutputClaim ClaimTypeReferenceId="ContextCorrelationId" />
+            <OutputClaim ClaimTypeReferenceId="ContextDateTimeInUtc" />
+            <OutputClaim ClaimTypeReferenceId="ContextDeploymentMode" />
+            <OutputClaim ClaimTypeReferenceId="ContextIPAddress" />
+            <OutputClaim ClaimTypeReferenceId="ContextHostName" />
+            <OutputClaim ClaimTypeReferenceId="ContextKMSI" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="ContextBuildNumber" />
+        <OutputClaim ClaimTypeReferenceId="ContextCorrelationId" />
+        <OutputClaim ClaimTypeReferenceId="ContextDateTimeInUtc" />
+        <OutputClaim ClaimTypeReferenceId="ContextDeploymentMode" />
+        <OutputClaim ClaimTypeReferenceId="ContextIPAddress" />
+        <OutputClaim ClaimTypeReferenceId="ContextHostName" />
+        <OutputClaim ClaimTypeReferenceId="ContextKMSI" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
