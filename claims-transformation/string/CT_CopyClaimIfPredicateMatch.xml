@@ -11,15 +11,15 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="signInName">
-        <DisplayName>Phone Number or Email Address</DisplayName>
+      <ClaimType Id="string1">
+        <DisplayName>Phone number or email address (string1)</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="phoneNumber">
-        <DisplayName>Phone Number</DisplayName>
+      <ClaimType Id="result">
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
-        <UserInputType>TextBox</UserInputType>
+        <UserInputType>Readonly</UserInputType>
         <PredicateValidationReference Id="internationalOrNationalPhoneNumber" />
       </ClaimType>
     </ClaimsSchema>
@@ -45,12 +45,12 @@
     </PredicateValidations>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="SetPhoneNumberIfPredicateMatch" TransformationMethod="CopyClaimIfPredicateMatch">
+      <ClaimsTransformation Id="SetResultIfPredicateMatch" TransformationMethod="CopyClaimIfPredicateMatch">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputClaim" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim" />
         </InputClaims>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="phoneNumber" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -60,19 +60,38 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="signInName" DefaultValue="+11234567890" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="+11234567890" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="signInName" />
-            <OutputClaim ClaimTypeReferenceId="phoneNumber" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="SetPhoneNumberIfPredicateMatch" />
+            <OutputClaimsTransformation ReferenceId="SetResultIfPredicateMatch" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -87,7 +106,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -102,8 +126,8 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="signInName" />
-        <OutputClaim ClaimTypeReferenceId="phoneNumber" />
+        <OutputClaim ClaimTypeReferenceId="string1" />
+        <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

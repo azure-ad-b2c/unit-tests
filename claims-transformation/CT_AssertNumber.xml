@@ -17,7 +17,7 @@
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>result</DisplayName>
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>boolean</DataType>
       </ClaimType>
     </ClaimsSchema>

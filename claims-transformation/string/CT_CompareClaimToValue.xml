@@ -26,7 +26,7 @@
         </Restriction>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>Result</DisplayName>
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>boolean</DataType>
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
