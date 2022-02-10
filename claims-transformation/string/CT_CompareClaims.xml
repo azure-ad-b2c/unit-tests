@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_ChangeCase"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ChangeCase">
+  PolicyId="B2C_1A_CT_CompareClaims"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_CompareClaims">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,45 +11,53 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="inputValue">
-        <DisplayName>Input value</DisplayName>
+      <ClaimType Id="string1">
+        <DisplayName>String 1</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="inputToCase">
-        <DisplayName>Change to</DisplayName>
+      <ClaimType Id="string2">
+        <DisplayName>String 2</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="operator">
+        <DisplayName>Operator</DisplayName>
         <DataType>string</DataType>
         <UserInputType>DropdownSingleSelect</UserInputType>
         <Restriction>
-          <Enumeration Text="Lower" Value="lower" SelectByDefault="true" />
-          <Enumeration Text="Upper" Value="upper" />
+          <Enumeration Text="Equal" Value="Equal" SelectByDefault="true" />
+          <Enumeration Text="Not equal" Value="Not equal" />
         </Restriction>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>The result of this claims transformation</DisplayName>
-        <DataType>string</DataType>
+        <DisplayName>Result</DisplayName>
+        <DataType>boolean</DataType>
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
-
     <ClaimsTransformations>
-      <ClaimsTransformation Id="ChangeInputValueToLower" TransformationMethod="ChangeCase">
+      <ClaimsTransformation Id="CheckStrings-Equal" TransformationMethod="CompareClaims">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="inputValue" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="string2" TransformationClaimType="inputClaim2" />
         </InputClaims>
         <InputParameters>
-          <InputParameter Id="toCase" DataType="string" Value="LOWER" />
+          <InputParameter Id="operator" DataType="string" Value="EQUAL" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="true" />
         </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
-      <ClaimsTransformation Id="ChangeInputValueToUpper" TransformationMethod="ChangeCase">
+      <ClaimsTransformation Id="CheckStrings-NotEqual" TransformationMethod="CompareClaims">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="inputValue" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="string2" TransformationClaimType="inputClaim2" />
         </InputClaims>
         <InputParameters>
-          <InputParameter Id="toCase" DataType="string" Value="upper" />
+          <InputParameter Id="operator" DataType="string" Value="not equal" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="true" />
         </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
@@ -70,29 +78,31 @@
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="inputValue" DefaultValue="SomeOne@Contoso.COM" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="abc" />
+            <InputClaim ClaimTypeReferenceId="string2" DefaultValue="ABC" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="inputValue" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="inputToCase" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="string2" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="operator" Required="true" />
             <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-ToLower">
+            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-Equal">
               <Preconditions>
                 <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-                  <Value>inputToCase</Value>
-                  <Value>upper</Value>
+                  <Value>operator</Value>
+                  <Value>Not equal</Value>
                   <Action>SkipThisValidationTechnicalProfile</Action>
                 </Precondition>
               </Preconditions>
             </ValidationTechnicalProfile>
 
-            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-ToUpper">
+            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-NotEqual">
               <Preconditions>
                 <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-                  <Value>inputToCase</Value>
-                  <Value>lower</Value>
+                  <Value>operator</Value>
+                  <Value>Equal</Value>
                   <Action>SkipThisValidationTechnicalProfile</Action>
                 </Precondition>
               </Preconditions>
@@ -101,31 +111,32 @@
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
-        <!--Validation technical profile-->
-        <TechnicalProfile Id="ExperimentalValidation-ToLower">
+         <!--Validation technical profile-->
+         <TechnicalProfile Id="ExperimentalValidation-Equal">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="ChangeInputValueToLower" />
+            <OutputClaimsTransformation ReferenceId="CheckStrings-Equal" />
           </OutputClaimsTransformations>
         </TechnicalProfile>
 
         <!--Validation technical profile-->
-        <TechnicalProfile Id="ExperimentalValidation-ToUpper">
+        <TechnicalProfile Id="ExperimentalValidation-NotEqual">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="ChangeInputValueToUpper" />
+            <OutputClaimsTransformation ReferenceId="CheckStrings-NotEqual" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
+        <!--Result technical profile (last page)-->
         <TechnicalProfile Id="ResultTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -172,7 +183,8 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="inputValue" />
+        <OutputClaim ClaimTypeReferenceId="string1" />
+        <OutputClaim ClaimTypeReferenceId="string2" />
         <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
