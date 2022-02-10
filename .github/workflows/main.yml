@@ -9,7 +9,7 @@ jobs:
     - name: 'Upload TrustFrameworkBase Policy'
       uses: azure-ad-b2c/deploy-trustframework-policy@v5
       with:
-        folder: "./claims-transformation/date"
+        folder: "./"
         files: "*"
         tenant: ${{ secrets.tenant }}
         clientId: ${{ secrets.clientId }}
