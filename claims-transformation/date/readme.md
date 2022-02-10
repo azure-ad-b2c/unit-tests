@@ -43,7 +43,7 @@ Determines if the `dateTime1` claim plus the `timeSpanInSeconds` parameter (5 se
 
 The unit test defines the following elements:
 
-- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `dateTime1` and `dateTime2` where you can choose the dates to compare. Then it runs the **CompareDates** output claims transformation. Select *Continue* the run the next orchestration step that shows the result.
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `dateTime1` and `dateTime2` where you can choose the dates to compare. Then it runs the **CompareDates** output claims transformation. Select *Continue* to run the next orchestration step that shows the result.
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **CompareDates** claims transformation - the unit test.
 
@@ -66,7 +66,7 @@ Determines if the `dateTime1` easier than the `2022-01-15T00:00:00`. The `result
 
 The unit test defines the following elements:
 
-- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `dateTime1` where you can choose a date to compare with `2022-01-15T00:00:00`. Then it runs the output claims transformation. Select *Continue* the run the next orchestration step that shows the result.
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `dateTime1` where you can choose a date to compare with `2022-01-15T00:00:00`. Then it runs the output claims transformation. Select *Continue* to run the next orchestration step that shows the result.
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **CompareDates** claims transformation - the unit test. The `2022-01-15T00:00:00` date is configure in this claims transformation.
 

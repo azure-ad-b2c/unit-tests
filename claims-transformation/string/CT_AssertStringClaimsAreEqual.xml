@@ -21,10 +21,28 @@
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
+      <ClaimType Id="stringComparisonType">
+        <DisplayName>String comparison type</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Ordinal" Value="Ordinal" />
+          <Enumeration Text="OrdinalIgnoreCase" Value="ordinalIgnoreCase" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="Assertstring1Andstring2AreEqual" TransformationMethod="AssertStringClaimsAreEqual">
+      <ClaimsTransformation Id="AssertStringsAreEqual-Ordinal" TransformationMethod="AssertStringClaimsAreEqual">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="string2" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringComparison" DataType="string" Value="Ordinal" />
+        </InputParameters>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="AssertStringsAreEqual-OrdinalIgnoreCase" TransformationMethod="AssertStringClaimsAreEqual">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim1" />
           <InputClaim ClaimTypeReferenceId="string2" TransformationClaimType="inputClaim2" />
@@ -55,22 +73,53 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
             <OutputClaim ClaimTypeReferenceId="string2" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="stringComparisonType" Required="true" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation" />
+            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-Ordinal">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>stringComparisonType</Value>
+                  <Value>ordinalIgnoreCase</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+
+            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-OrdinalIgnoreCase">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>stringComparisonType</Value>
+                  <Value>Ordinal</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
         <!--Validation technical profile-->
-        <TechnicalProfile Id="ExperimentalValidation">
+        <TechnicalProfile Id="ExperimentalValidation-Ordinal">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="Assertstring1Andstring2AreEqual" />
+            <OutputClaimsTransformation ReferenceId="AssertStringsAreEqual-Ordinal" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+
+        <!--Validation technical profile-->
+        <TechnicalProfile Id="ExperimentalValidation-OrdinalIgnoreCase">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="AssertStringsAreEqual-OrdinalIgnoreCase" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -103,6 +152,7 @@
         <!-- Unit test claims-->
         <OutputClaim ClaimTypeReferenceId="string1" />
         <OutputClaim ClaimTypeReferenceId="string2" />
+        <OutputClaim ClaimTypeReferenceId="stringComparisonType" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

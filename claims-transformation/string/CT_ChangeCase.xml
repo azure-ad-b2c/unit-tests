@@ -14,12 +14,21 @@
       <ClaimType Id="inputValue">
         <DisplayName>Input value</DisplayName>
         <DataType>string</DataType>
-        <UserInputType>Paragraph</UserInputType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="inputToCase">
+        <DisplayName>Change to</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Lower" Value="lower" SelectByDefault="true" />
+          <Enumeration Text="Upper" Value="upper" />
+        </Restriction>
       </ClaimType>
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation</DisplayName>
         <DataType>string</DataType>
-        <UserInputType>Paragraph</UserInputType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -35,6 +44,17 @@
           <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
+      <ClaimsTransformation Id="ChangeInputValueToUpper" TransformationMethod="ChangeCase">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputValue" TransformationClaimType="inputClaim1" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="toCase" DataType="string" Value="upper" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
     </ClaimsTransformations>
   </BuildingBlocks>
 
@@ -44,31 +64,52 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="inputValue" DefaultValue="SomeOne@Contoso.COM" AlwaysUseDefaultValue="true" />
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="inputValue" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="ChangeInputValueToLower" />
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-        </TechnicalProfile>
-        <TechnicalProfile Id="ResultTechnicalProfile">
-          <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="inputValue" />
+            <InputClaim ClaimTypeReferenceId="inputValue" DefaultValue="SomeOne@Contoso.COM" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="inputValue" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="inputToCase" Required="true" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="ResultTechnicalProfile-ToLower">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="ChangeInputValueToLower" />
+          </InputClaimsTransformations>
+          <InputClaims>
             <InputClaim ClaimTypeReferenceId="result" />
           </InputClaims>
           <DisplayClaims>
-            <DisplayClaim ClaimTypeReferenceId="inputValue"  />
-            <DisplayClaim ClaimTypeReferenceId="result"  />
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="ResultTechnicalProfile-ToUpper">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="ChangeInputValueToUpper" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
           </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -85,11 +126,30 @@
           </ClaimsExchanges>
         </OrchestrationStep>
         <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>inputToCase</Value>
+              <Value>upper</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+            <ClaimsExchange Id="ResultTechnicalProfile-ToLower" TechnicalProfileReferenceId="ResultTechnicalProfile-ToLower" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>inputToCase</Value>
+              <Value>lower</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile-ToUpper" TechnicalProfileReferenceId="ResultTechnicalProfile-ToUpper" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
