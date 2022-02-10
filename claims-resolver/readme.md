@@ -54,7 +54,7 @@ Demonstrates how to use the SAML claim resolvers with information about the SAML
 
 ### Use the SAML Service provider live demo
 
-Use our [SAML test application](https://b2ciefsetupapp.azurewebsites.net/) to test this policy. In the SAML test app provide the following information:
+Use our [SAML test application](https://samltestapp2.azurewebsites.net/SP) to test this policy. In the SAML test app provide the following information:
 
 - **Tenant Name**: `b2clivedemo`
 - **B2C Policy**: `B2C_1A_CR_SAML`
