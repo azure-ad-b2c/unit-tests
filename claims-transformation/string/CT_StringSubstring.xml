@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_StringSplit"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_StringSplit">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CT_StringSubstring" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_StringSubstring">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -14,21 +14,24 @@
       <ClaimType Id="string1">
         <DisplayName>string1</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>Test result</DisplayName>
-        <DataType>stringCollection</DataType>
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="ConvertStringToStringCollection" TransformationMethod="StringSplit">
+      <ClaimsTransformation Id="GetCodePrefix" TransformationMethod="StringSubstring">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim" />
         </InputClaims>
         <InputParameters>
-        <InputParameter DataType="string" Id="delimiter" Value="," />
-          </InputParameters>
+          <InputParameter Id="startIndex" DataType="int" Value="0" />
+          <InputParameter Id="length" DataType="int" Value="3" />
+        </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
@@ -40,19 +43,38 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="Admin,Author,Reader" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="ADC-15347" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="string1" />
-            <OutputClaim ClaimTypeReferenceId="result" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="ConvertStringToStringCollection" />
+            <OutputClaimsTransformation ReferenceId="GetCodePrefix" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -67,7 +89,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>

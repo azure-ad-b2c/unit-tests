@@ -23,7 +23,7 @@
         </Restriction>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>Test result</DisplayName>
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
         <UserInputType>Readonly</UserInputType>
       </ClaimType>

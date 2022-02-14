@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_CT_ParseDomain" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ParseDomain">
+  PolicyId="B2C_1A_CT_StringContains" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_StringContains">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -16,20 +16,46 @@
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
+      <ClaimType Id="inputIgnoreCase">
+        <DisplayName>Ignore case</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="True" Value="True" SelectByDefault="true" />
+          <Enumeration Text="False" Value="False" />
+        </Restriction>
+      </ClaimType>
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
-        <DataType>string</DataType>
+        <DataType>boolean</DataType>
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="GetDomainName" TransformationMethod="ParseDomain">
+      <ClaimsTransformation Id="CheckIsString1Contains-IgnoreCase" TransformationMethod="StringContains">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="emailAddress" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim" />
         </InputClaims>
+        <InputParameters>
+          <InputParameter Id="contains" DataType="string" Value="readers" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="true" />
+        </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="domain" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CheckIsString1Contains-RespectCase" TransformationMethod="StringContains">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="contains" DataType="string" Value="Readers" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="false" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -47,13 +73,59 @@
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="emily@contoso.com" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="Contributors and readers" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="inputIgnoreCase" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="result" />
+          </OutputClaims>
+
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-IgnoreCase">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>inputIgnoreCase</Value>
+                  <Value>False</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+
+            <ValidationTechnicalProfile ReferenceId="ExperimentalValidation-RespectCase">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>inputIgnoreCase</Value>
+                  <Value>True</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Validation technical profile-->
+        <TechnicalProfile Id="ExperimentalValidation-IgnoreCase">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetDomainName" />
+            <OutputClaimsTransformation ReferenceId="CheckIsString1Contains-IgnoreCase" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+
+        <!--Validation technical profile-->
+        <TechnicalProfile Id="ExperimentalValidation-RespectCase">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="result" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CheckIsString1Contains-RespectCase" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -72,8 +144,7 @@
             <DisplayClaim ClaimTypeReferenceId="result" />
           </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-        </TechnicalProfile>        
-
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>

@@ -16,7 +16,7 @@
         <DataType>stringCollection</DataType>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>Test result</DisplayName>
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>boolean</DataType>
       </ClaimType>
     </ClaimsSchema>

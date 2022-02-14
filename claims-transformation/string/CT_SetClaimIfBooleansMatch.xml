@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_GetMappedValueFromLocalizedCollection"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetMappedValueFromLocalizedCollection">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CT_SetClaimIfBooleansMatch" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_SetClaimIfBooleansMatch">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,60 +11,37 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="code">
-        <DisplayName>Type 'Message1', or 'Message2' to get the corresponding message (code)</DisplayName>
-        <DataType>string</DataType>
-        <UserInputType>TextBox</UserInputType>
+      <ClaimType Id="boolean1">
+        <DisplayName>boolean1</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="True" Value="True" SelectByDefault="true" />
+          <Enumeration Text="False" Value="False" />
+        </Restriction>
       </ClaimType>
+
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
         <UserInputType>Readonly</UserInputType>
-        <Restriction>
-          <Enumeration Text="Message1" Value="Default message1" />
-          <Enumeration Text="Message2" Value="Default message2" />
-        </Restriction>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="GetValueByCode" TransformationMethod="GetMappedValueFromLocalizedCollection">
+      <ClaimsTransformation Id="SetClaimIfBooleansClaimIsTrue" TransformationMethod="SetClaimIfBooleansMatch">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="code" TransformationClaimType="mapFromClaim" />
+          <InputClaim ClaimTypeReferenceId="boolean1" TransformationClaimType="claimToMatch" />
         </InputClaims>
+        <InputParameters>
+          <InputParameter Id="matchTo" DataType="string" Value="true" />
+          <InputParameter Id="outputClaimIfMatched" DataType="string" Value="You have a promotion code." />
+        </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="restrictionValueClaim" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
-
-    <ContentDefinitions>
-      <ContentDefinition Id="api.selfasserted">
-        <LocalizedResourcesReferences MergeBehavior="Prepend">
-          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.en" />
-          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.es" />
-        </LocalizedResourcesReferences>
-      </ContentDefinition>
-    </ContentDefinitions>
-
-    <Localization Enabled="true">
-      <LocalizedResources Id="api.selfasserted.en">
-        <LocalizedCollections>
-          <LocalizedCollection ElementType="ClaimType" ElementId="result" TargetCollection="Restriction">
-            <Item Text="Message1" Value="First message in english" />
-            <Item Text="Message2" Value="Second message in english" />
-          </LocalizedCollection>
-        </LocalizedCollections>
-      </LocalizedResources>
-      <LocalizedResources Id="api.selfasserted.es">
-        <LocalizedCollections>
-          <LocalizedCollection ElementType="ClaimType" ElementId="result" TargetCollection="Restriction">
-            <Item Text="Message1" Value="Primer mensaje en español" />
-            <Item Text="Message2" Value="Segundo mensaje en español" />
-          </LocalizedCollection>
-        </LocalizedCollections>
-      </LocalizedResources>
-    </Localization>
   </BuildingBlocks>
 
   <ClaimsProviders>
@@ -79,13 +56,13 @@
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="code" DefaultValue="Message2" />
+            <InputClaim ClaimTypeReferenceId="boolean1" DefaultValue="true" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="code" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="boolean1" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetValueByCode" />
+            <OutputClaimsTransformation ReferenceId="SetClaimIfBooleansClaimIsTrue" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -137,7 +114,7 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="code" />
+        <OutputClaim ClaimTypeReferenceId="boolean1" />
         <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />

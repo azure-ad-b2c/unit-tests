@@ -11,36 +11,43 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="string1">
+        <DisplayName>string1</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="string2">
+        <DisplayName>string2</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
       <ClaimType Id="groups">
         <DisplayName>groups</DisplayName>
         <DataType>stringCollection</DataType>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>Test result</DisplayName>
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="AddGroup1" TransformationMethod="AddParameterToStringCollection">
+      <ClaimsTransformation Id="AddString1" TransformationMethod="AddItemToStringCollection">
         <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="item" />
           <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
         </InputClaims>
-        <InputParameters>
-          <InputParameter Id="item" DataType="string" Value="Contributors" />
-        </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
         </OutputClaims>
       </ClaimsTransformation>
 
-      <ClaimsTransformation Id="AddGroup2" TransformationMethod="AddParameterToStringCollection">
+      <ClaimsTransformation Id="AddString2" TransformationMethod="AddItemToStringCollection">
         <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string2" TransformationClaimType="item" />
           <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
         </InputClaims>
-        <InputParameters>
-          <InputParameter Id="item" DataType="string" Value="READERS" />
-        </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
         </OutputClaims>
@@ -48,7 +55,7 @@
 
       <ClaimsTransformation Id="ConvertStringCollectionToCommaDelimiterString" TransformationMethod="StringJoin">
         <InputClaims>
-         <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="inputClaim" />
+          <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="inputClaim" />
         </InputClaims>
         <InputParameters>
           <InputParameter DataType="string" Id="delimiter" Value="," />
@@ -64,18 +71,42 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="abc" />
+            <InputClaim ClaimTypeReferenceId="string2" DefaultValue="123" />
+          </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="groups" />
-            <OutputClaim ClaimTypeReferenceId="result" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="string2" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="AddGroup1" />
-            <OutputClaimsTransformation ReferenceId="AddGroup2" />
+            <OutputClaimsTransformation ReferenceId="AddString1" />
+            <OutputClaimsTransformation ReferenceId="AddString2" />
             <OutputClaimsTransformation ReferenceId="ConvertStringCollectionToCommaDelimiterString" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -90,7 +121,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>

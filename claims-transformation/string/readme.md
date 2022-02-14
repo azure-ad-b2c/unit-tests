@@ -49,7 +49,7 @@ The unit test defines the following elements:
 
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` and `string2` claims with default values (you can change the values). Select the type of the comparison *equal*, or *not equal*. Then, select *Continue* to run the validation technical profiles.
 - **ExperimentalValidation-Equal** - [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile) type of [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile). This validation technical profile invokes the **CheckStrings-Equal** claims transformation, which checks if the claims are equal.
-- **ExperimentalValidation-NotEqual** - [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile) type of [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile). This validation technical profile invokes the **CheckStrings-NotEqual** claims transformation, which checks if the claims are not equal.
+- **ExperimentalValidation-NotEqual** - [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile) type of [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile). This validation technical profile invokes the **CheckStrings-NotEqual** claims transformation, which checks if the claims aren't equal.
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **CheckStrings-Equal** claims transformation - strings equal unit test.
 - **CheckStrings-NotEqual** claims transformation - strings not equal unit test.
@@ -64,7 +64,7 @@ The unit test defines the following elements:
 
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` and `string2` claims with default values (you can change the values). Select the type of the comparison *equal*, or *not equal*. Then, select *Continue* to run the validation technical profiles.
 - **ExperimentalValidation-Equal** - [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile) type of [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile). This validation technical profile invokes the **CheckStrings-Equal** claims transformation, which checks if the claims are equal.
-- **ExperimentalValidation-NotEqual** - [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile) type of [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile). This validation technical profile invokes the **CheckStrings-NotEqual** claims transformation, which checks if the claims are not equal.
+- **ExperimentalValidation-NotEqual** - [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile) type of [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile). This validation technical profile invokes the **CheckStrings-NotEqual** claims transformation, which checks if the claims aren't equal.
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **CheckStrings-Equal** claims transformation - strings equal unit test.
 - **CheckStrings-NotEqual** claims transformation - strings not equal unit test.
@@ -75,7 +75,7 @@ The unit test defines the following elements:
 
 Tries to copy the `string1` claim value to `result` claim. It will copy the value only if the `string1` is in international phone number format, as configured in the **internationalOrNationalPhoneNumber** predicate. 
 
-When you provide a valid phone number, the claim will be copy to the result. When you select *Continue* you will see the exact same value on the result page. But if you provide any string, such as email address, the result claim will be empty. 
+When you provide a valid phone number, the claim will be copy to the result. When you select *Continue*, you'll see the exact same value on the result page. But if you provide any string, such as email address, the result claim will be empty. 
 
 The unit test defines the following elements:
 
@@ -93,13 +93,13 @@ Creates a TOTP string claim. The unit test defines the following elements:
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. The input claims transformation **SetResultIfPredicateMatch** of this technical profile runs the **CreateOtpSecret**. 
 - **CreateOtpSecret** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_CreateOtpSecret/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_CopyClaimIfPredicateMatch.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#createotpsecret)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_CreateOtpSecret/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_CreateOtpSecret.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#createotpsecret)
 
 ## CreateRandomString
 
 Creates a random string using the random number or GUID generator. The unit test defines the following elements:
 
-- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile lets you choose the type of the or transformation. Then, select *Continue* to run the validation technical profiles.
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile lets you choose the type of the transformation. Then, select *Continue* to run the validation technical profiles.
 - [Validation technical profiles](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile) (type of [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile)):
   - **ExperimentalValidation-Integer** - invokes the **CreateIntegerRandomValue** claims transformation, which creates an integer random value.
   - **ExperimentalValidation-IntegerWithFormat** - invokes the **CreateIntegerWithFormatRandomValue** claims transformation, which creates an integer random value. The return value is formatted `ID_{the random value}`.
@@ -116,7 +116,7 @@ Creates a random string using the random number or GUID generator. The unit test
   - **CreateGUIDWithFormatRandomValue** - creates a GUID random value with format  unit test.
   - **CreateGUIDWithFormatWithBase64RandomValue** - creates a GUID random value with format, and base64  unit test.
   
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_CreateRandomString/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_CompareClaimToValue.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#createrandomstring)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_CreateRandomString/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_CreateRandomString.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#createrandomstring)
 
 ## CreateStringClaim
 
@@ -125,7 +125,7 @@ Sets the value of the `result` claim to `Contoso terms of service...`. The unit 
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile calls the **SetStringClaimValue** input claims transformation. Then renders the `result` output claim to the screen.
 - **SetStringClaimValue** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_CreateStringClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#createstringclaim)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_CreateStringClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_CreateStringClaim.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#createstringclaim)
 
 ## FormatLocalizedString
 
@@ -135,7 +135,7 @@ Formats the `string1`, `string2` and `string3` claims according to a provided lo
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **SetResponseMessage** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_FormatLocalizedString/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#formatlocalizedstring)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_FormatLocalizedString/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_FormatLocalizedString.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#formatlocalizedstring)
 
 ## FormatStringClaim
 
@@ -145,7 +145,7 @@ Formats the `string1` claim according to the provided format string. The result 
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **FormatString1** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_FormatStringClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#formatstringclaim)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_FormatStringClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_FormatStringClaim.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#formatstringclaim)
 
 ## FormatStringMultipleClaims
 
@@ -155,7 +155,7 @@ Formats the `string1` and `string2` claims according to the provided format stri
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **FormatString1AndString2** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_FormatStringMultipleClaims/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#formatstringmultipleclaims)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_FormatStringMultipleClaims/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_FormatStringMultipleClaims.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#formatstringmultipleclaims)
 
 
 ## GetLocalizedStringsTransformation
@@ -165,7 +165,7 @@ Copies localized strings into the `string1`, `string2`, `string3`, and `string4`
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile calls the **GetLocalizedStringsForEmail** input claims transformation. Then renders the `result` output claim to the screen.
 - **GetLocalizedStringsForEmail** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetLocalizedStringsTransformation/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#getlocalizedstringstransformation)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetLocalizedStringsTransformation/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_GetLocalizedStringsTransformation.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#getlocalizedstringstransformation)
 
 ## GetMappedValueFromLocalizedCollection
 
@@ -175,17 +175,17 @@ Looks up a localized string of the `result` claim and sets the value to the `res
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **GetValueByCode** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetMappedValueFromLocalizedCollection/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#getmappedvaluefromlocalizedcollection)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetMappedValueFromLocalizedCollection/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_GetMappedValueFromLocalizedCollection.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#getmappedvaluefromlocalizedcollection)
 
 ## LookupValue
 
-Looks up a value from a list of values in the **GetValueById** claims transformation input parameters collections. The look up is done based on the value of the `idToLookup`. The unit test defines the following elements:
+Looks up a value from a list of values in the **GetValueById** claims transformation input parameters collections. The lookup is done based on the value of the `idToLookup`. The unit test defines the following elements:
 
-- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `idToLookup` claim with a default value (you can change the value). The idToLookup that you provide is used to search for the corresponding `Id` input parameter. Note, if you select the *fabrikam.com* value, an empty string will be return. Since there is not such Id in the claims transformation. The output claims transformation **GetValueById** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `idToLookup` claim with a default value (you can change the value). The idToLookup that you provide is used to search for the corresponding `Id` input parameter. Note, if you select the *fabrikam.com* value, an empty string will be return. Since there isn't such ID in the claims transformation. The output claims transformation **GetValueById** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **GetValueById** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_LookupValue/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#lookupvalue)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_LookupValue/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_LookupValue.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#lookupvalue)
 
 ## NullClaim
 
@@ -195,14 +195,148 @@ Cleans the value of the `string1` claim. The unit test defines the following ele
 - **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `string1` with empty string.
 - **GetValueById** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_NullClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/nullclaim)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_NullClaim/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_NullClaim.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/nullclaim)
 
 ## ParseDomain
 
-Gets the domain portion of the `string1` email. The result of this unit test is a `result` claim that contains the domain part of the `string1` claim. If the provide email address isn't valid an empty string returns. The unit test defines the following elements:
+Gets the domain portion of the `string1` email. The result of this unit test is a `result` claim that contains the domain part of the `string1` claim. If the provide email address isn't valid an empty string return. The unit test defines the following elements:
 
 - **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **GetDomainName** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
-- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `string1` with empty string.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
 - **GetDomainName** claims transformation - the unit test.
 
-![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_ParseDomain/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_BuildUri.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/parsedomain)
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_ParseDomain/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_ParseDomain.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/parsedomain)
+
+## SetClaimIfBooleansMatch
+
+Checks that the `boolean1` claim is true, or false. If true, sets the `result` output claim with the value present in outputClaimIfMatched input parameter of the **SetClaimIfBooleansClaimIsTrue** claims transformation.
+
+The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `boolean1` claim with a default value (you can change the value). The output claims transformation **SetClaimIfBooleansClaimIsTrue** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
+- **SetClaimIfBooleansClaimIsTrue** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_SetClaimIfBooleansMatch/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_SetClaimIfBooleansMatch.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/setclaimifbooleansmatch)
+
+## SetClaimsIfRegexMatch
+
+Checks that the `string1` claim is matched to the **CheckIfStringsAreEqual** claims transformation's `matchTo` input parameter (a phone number format). If match, sets the:
+
+- `resultValue` output claims with the value present in `outputClaimIfMatched` input parameter.
+- `resultMatch` output claim with true or false based on the result of comparison.
+
+The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **SetIfString1RegexMatch** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `resultValue`, `resultCode`, and `resultMatch` claims.
+- **SetIfString1RegexMatch** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_SetClaimsIfRegexMatch/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_SetClaimsIfRegexMatch.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/setclaimsifregexmatch)
+
+## SetClaimsIfRegexMatch with Groups
+
+Checks that the `string1` claim is matched to the **CheckIfStringsAreEqual** claims transformation's `matchTo` input parameter (email format). This mode of the claims transformation also should extract the Regex group values. If match, sets the:
+
+- `resultValue` output claims with the value present in `outputClaimIfMatched` input parameter.
+- `resultGroup1` output claims with the Regex group as configured in the `matchTo` input parameter.
+- `resultMatch` output claim with true or false based on the result of comparison.
+
+The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **SetIfString1RegexMatch** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `resultValue`, `resultCode`, and `resultMatch` claims.
+- **SetIfString1RegexMatch** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_SetClaimsIfRegexMatch_WithGrouping/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_SetClaimsIfRegexMatch_WithGrouping.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/setclaimsifregexmatch)
+
+
+## SetClaimsIfStringsAreEqual
+
+Checks that the `string1` claim is matched to the **CheckIfStringsAreEqual** claims transformation's `matchTo` input parameter. If match, sets the:
+
+- `resultValue` output claims with the value present in `stringMatchMsg` input parameters.
+- `resultCode` output claims with the value present in `stringMatchMsgCode` input parameters
+- `resultMatch` output claim with true or false based on the result of comparison.
+
+The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **CheckIfStringsAreEqual** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `resultValue`, `resultCode`, and `resultMatch` claims.
+- **CheckIfStringsAreEqual** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_SetClaimsIfStringsAreEqual/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_SetClaimsIfStringsAreEqual.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/setclaimsifstringsareequal)
+
+## SetClaimsIfStringsMatch
+
+Checks that the `string1` claim is matched to the **CheckIfStringMatch** claims transformation's `matchTo` input parameter. If match, sets the `result` output claims with the value present in `outputClaimIfMatched` input parameter, along with compare result `resultMatch` claim, which is to be set as true or false based on the result of comparison.
+
+The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **CheckIfStringMatch** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile.This technical profile shows the `result` of this unit test.
+- **CheckIfStringMatch** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_SetClaimsIfStringsMatch/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_SetClaimsIfStringsMatch.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/setclaimsifstringsmatch)
+
+## StringContains
+
+Determines whether a specified substring occurs within the `string1` claim. The result is the `result` claim with a value of true or false. true if the value parameter occurs within this string, otherwise, false. You can whether to ignore case or not.
+
+The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). Select whether to ignore case (case insensitive), nor (case sensitive). Select *Continue* the run the validation technical profiles.
+- [Validation technical profiles](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile) (type of [claims transformation](https://docs.microsoft.com/azure/active-directory-b2c/claims-transformation-technical-profile)):
+  - **ExperimentalValidation-IgnoreCase** - invokes the **CheckIsString1Contains-IgnoreCase** claims transformation, which searches the substring with case insensitive configuration.
+  - **ExperimentalValidation-RespectCase** - invokes the **CheckIsString1Contains-RespectCase** claims transformation, which searches the substring with case sensitive configuration.
+- Claims transformations:
+  - **CheckIsString1Contains-IgnoreCase** claims transformation - the case insensitive unit test.
+  - **CheckIsString1Contains-RespectCase** claims transformation - the case sensitive unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_StringContains/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_StringContains.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#stringcontains)
+
+## StringJoin
+
+Concatenates the elements of the `groups` string collection claim, using the specified separator between each element or member. The result is the `result` claim which a comma delimiter string of the `groups` string collection.
+
+To test the functionality of the StringJoin claims transformation, we first collect the `string1` and `string2` claims. Then We add these claims to the `groups` string collection using the **AddString1** and **AddString2** claims transformation. After the claims are added to the string collection, the unit test converts them back to the `result` string claim type.
+
+The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` and `string2` claims with  default values (you can change the values). The technical profile runs the following claims transformations:
+  1. **AddString1** adds the `string1` to the `groups` claim.
+  1. **AddString2** adds the `string2` to the `groups` claim.
+  1. **ConvertStringCollectionToCommaDelimiterString** runs the unit test.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
+- **ConvertStringCollectionToCommaDelimiterString** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_StringJoin/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_StringJoin.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/parsedomain)
+
+## StringReplace
+
+Searches the `string1` claim type string for a specified value (`-`) as specified in the **NormalizePhoneNumber** claims transformation's `oldValue` input parameter, and replaces with the value of the `newValue` input parameter (empty string). The result of this unit test is a `result` claim that contains the new string (after the replacement). The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **NormalizePhoneNumber** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
+- **NormalizePhoneNumber** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_StringReplace/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_StringReplace.xml) &nbsp; ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#stringreplace)
+
+## StringSplit
+
+Splits the `string1` claim into the `result` string collection of substrings. It splits the string using the comma delimiter (`-`) as configure in the **ConvertStringToStringCollection** claims transformation's `delimiter` input claim. The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **ConvertStringToStringCollection** runs the unit test. Select *Continue* to get an ID token with the string collection.
+- **ConvertStringToStringCollection** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_StringSplit/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_StringSplit.xml) &nbsp; ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#stringsplit)
+
+## StringSubstring
+
+Extracts parts of the `string1` claim type, beginning at the character at the specified position, and returns the specified number of characters. The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `string1` claim with a default value (you can change the value). The output claims transformation **GetCodePrefix** runs the unit test. Select *Continue* to run the next orchestration step that shows the result.
+- **ResultTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile shows the `result` of this unit test.
+- **GetCodePrefix** claims transformation - the unit test.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_StringSubstring/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_StringSubstring.xml) &nbsp; ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/string-transformations#stringsubstring)
