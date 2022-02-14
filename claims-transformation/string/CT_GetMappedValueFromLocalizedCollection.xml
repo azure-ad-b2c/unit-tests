@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_FormatLocalizedString"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_FormatLocalizedString">
+  PolicyId="B2C_1A_CT_GetMappedValueFromLocalizedCollection"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetMappedValueFromLocalizedCollection">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,36 +11,29 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="string1">
-        <DisplayName>string1</DisplayName>
+      <ClaimType Id="code">
+        <DisplayName>Type 'Message1', or 'Message2' to get the corresponding message (code)</DisplayName>
         <DataType>string</DataType>
-      </ClaimType>
-      <ClaimType Id="string2">
-        <DisplayName>string2</DisplayName>
-        <DataType>string</DataType>
-      </ClaimType>
-      <ClaimType Id="string3">
-        <DisplayName>string3</DisplayName>
-        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>The result of this claims transformation (result)</DisplayName>
+        <DisplayName>Test result</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+        <Restriction>
+          <Enumeration Text="Message1" Value="Default message1" />
+          <Enumeration Text="Message2" Value="Default message2" />
+        </Restriction>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="SetResponseMessage" TransformationMethod="FormatLocalizedString">
+      <ClaimsTransformation Id="GetValueByCode" TransformationMethod="GetMappedValueFromLocalizedCollection">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="string1" />
-          <InputClaim ClaimTypeReferenceId="string2" />
-          <InputClaim ClaimTypeReferenceId="string3" />
+          <InputClaim ClaimTypeReferenceId="code" TransformationClaimType="mapFromClaim" />
         </InputClaims>
-        <InputParameters>
-          <InputParameter Id="stringFormatId" DataType="string" Value="ResponseMessge_EmailExists" />
-        </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="restrictionValueClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -55,20 +48,21 @@
     </ContentDefinitions>
 
     <Localization Enabled="true">
-      <!-- <SupportedLanguages DefaultLanguage="en" MergeBehavior="Append">
-        <SupportedLanguage>en</SupportedLanguage>
-        <SupportedLanguage>es</SupportedLanguage>
-      </SupportedLanguages> -->
-
       <LocalizedResources Id="api.selfasserted.en">
-        <LocalizedStrings>
-          <LocalizedString ElementType="FormatLocalizedStringTransformationClaimType" StringId="ResponseMessge_EmailExists">Format localized string sample: '{0}', '{1}', '{2}'</LocalizedString>
-        </LocalizedStrings>
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="result" TargetCollection="Restriction">
+            <Item Text="Message1" Value="First message in english" />
+            <Item Text="Message2" Value="Second message in english" />
+          </LocalizedCollection>
+        </LocalizedCollections>
       </LocalizedResources>
       <LocalizedResources Id="api.selfasserted.es">
-        <LocalizedStrings>
-          <LocalizedString ElementType="FormatLocalizedStringTransformationClaimType" StringId="ResponseMessge_EmailExists">Formato de muestra de cadena localizada : '{0}', '{1}', '{2}'</LocalizedString>
-        </LocalizedStrings>
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="result" TargetCollection="Restriction">
+            <Item Text="Message1" Value="Primer mensaje en español" />
+            <Item Text="Message2" Value="Segundo mensaje en español" />
+          </LocalizedCollection>
+        </LocalizedCollections>
       </LocalizedResources>
     </Localization>
   </BuildingBlocks>
@@ -77,25 +71,38 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="1@test.com" />
-            <InputClaim ClaimTypeReferenceId="string2" DefaultValue="2@test.com" />
-            <InputClaim ClaimTypeReferenceId="string3" DefaultValue="3@test.com" />
+            <InputClaim ClaimTypeReferenceId="code" DefaultValue="Message2" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="string1" />
-            <OutputClaim ClaimTypeReferenceId="string2" />
-            <OutputClaim ClaimTypeReferenceId="string3" />
+            <OutputClaim ClaimTypeReferenceId="code" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="SetResponseMessage" />
+            <OutputClaimsTransformation ReferenceId="GetValueByCode" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -110,7 +117,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -125,9 +137,7 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="string1" />
-        <OutputClaim ClaimTypeReferenceId="string2" />
-        <OutputClaim ClaimTypeReferenceId="string3" />
+        <OutputClaim ClaimTypeReferenceId="code" />
         <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_FormatStringMultipleClaims"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_FormatStringMultipleClaims">
+  PolicyId="B2C_1A_CT_CreateStringClaim"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_CreateStringClaim">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -14,20 +14,16 @@
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
-
     <ClaimsTransformations>
-      <ClaimsTransformation Id="CreateDisplayNameFromFirstNameAndLastName" TransformationMethod="FormatStringMultipleClaims">
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="givenName" TransformationClaimType="inputClaim1" />
-          <InputClaim ClaimTypeReferenceId="surName" TransformationClaimType="inputClaim2" />
-        </InputClaims>
+      <ClaimsTransformation Id="SetStringClaimValue" TransformationMethod="CreateStringClaim">
         <InputParameters>
-          <InputParameter Id="stringFormat" DataType="string" Value="{0} {1}" />
+          <InputParameter Id="value" DataType="string" Value="Contoso terms of service..." />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="createdClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -39,18 +35,19 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="SetStringClaimValue" />
+          </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="givenName" DefaultValue="Emily" />
-            <InputClaim ClaimTypeReferenceId="surName" DefaultValue="Smith" />
+            <InputClaim ClaimTypeReferenceId="result" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="givenName" />
-            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateDisplayNameFromFirstNameAndLastName" />
-          </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -80,8 +77,6 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="givenName" />
-        <OutputClaim ClaimTypeReferenceId="surName" />
         <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_CT_NullClaim" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_NullClaim">
+  PolicyId="B2C_1A_CT_ParseDomain" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ParseDomain">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -14,13 +14,22 @@
       <ClaimType Id="string1">
         <DisplayName>string1</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="result">
+        <DisplayName>Test result</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="NullString" TransformationMethod="NullClaim">
+      <ClaimsTransformation Id="GetDomainName" TransformationMethod="ParseDomain">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="emailAddress" />
+        </InputClaims>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="string1" TransformationClaimType="claim_to_null" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="domain" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -30,20 +39,41 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="My test value" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="emily@contoso.com" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="string1" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="NullString" />
+            <OutputClaimsTransformation ReferenceId="GetDomainName" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>        
+
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -56,7 +86,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -72,6 +107,7 @@
 
         <!-- Unit test claims-->
         <OutputClaim ClaimTypeReferenceId="string1" />
+        <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

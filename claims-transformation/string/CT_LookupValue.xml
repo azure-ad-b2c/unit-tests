@@ -14,10 +14,18 @@
       <ClaimType Id="idToLookup">
         <DisplayName>idToLookup</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="contoso.com" Value="contoso.com" />
+          <Enumeration Text="fabrikam.com" Value="fabrikam.com" />
+          <Enumeration Text="microsoft.com" Value="microsoft.com" />
+          <Enumeration Text="test.com" Value="test.com" />
+        </Restriction>
       </ClaimType>
       <ClaimType Id="result">
         <DisplayName>Test result</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -43,18 +51,35 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="idToLookup" DefaultValue="microsoft.com" />
-          </InputClaims>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="idToLookup" />
+            <OutputClaim ClaimTypeReferenceId="idToLookup" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetValueById" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -69,7 +94,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>

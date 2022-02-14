@@ -14,18 +14,22 @@
       <ClaimType Id="string1">
         <DisplayName>string1</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
       <ClaimType Id="string2">
         <DisplayName>string2</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
       <ClaimType Id="string3">
         <DisplayName>string3</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
       <ClaimType Id="string4">
         <DisplayName>string4</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -73,21 +77,28 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetLocalizedStringsForEmail" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="string1" />
+            <InputClaim ClaimTypeReferenceId="string2" />
+            <InputClaim ClaimTypeReferenceId="string3" />
+            <InputClaim ClaimTypeReferenceId="string4" />
+          </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="string1" />
             <OutputClaim ClaimTypeReferenceId="string2" />
             <OutputClaim ClaimTypeReferenceId="string3" />
             <OutputClaim ClaimTypeReferenceId="string4" />
           </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetLocalizedStringsForEmail" />
-          </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
