@@ -14,10 +14,15 @@
       <ClaimType Id="long1">
         <DisplayName>long1</DisplayName>
         <DataType>long</DataType>
+        <UserInputType>TextBox</UserInputType>
+        <Restriction>
+          <Pattern RegularExpression="\d" HelpText="Only numbers" />
+        </Restriction>
       </ClaimType>
       <ClaimType Id="result">
-        <DisplayName>Test reslt</DisplayName>
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -37,21 +42,37 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <InputClaims>
+           <InputClaims>
             <InputClaim ClaimTypeReferenceId="long1" DefaultValue="99" AlwaysUseDefaultValue="true" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="long1" />
-            <OutputClaim ClaimTypeReferenceId="result" />
+            <OutputClaim ClaimTypeReferenceId="long1" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="ConvertIntToString" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
+
+                <!--Result technical profile (last page)-->
+                <TechnicalProfile Id="ResultTechnicalProfile">
+                  <DisplayName>Unit test</DisplayName>
+                  <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                  <Metadata>
+                    <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+                  </Metadata>
+                  <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="result" />
+                  </InputClaims>
+                  <DisplayClaims>
+                    <DisplayClaim ClaimTypeReferenceId="result" />
+                  </DisplayClaims>
+                  <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -64,7 +85,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
