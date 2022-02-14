@@ -11,13 +11,15 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="email1">
-        <DisplayName>Email 1</DisplayName>
+      <ClaimType Id="string1">
+        <DisplayName>String 1</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="email2">
-        <DisplayName>Email 2</DisplayName>
+      <ClaimType Id="string2">
+        <DisplayName>String 2</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
@@ -26,18 +28,18 @@
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="AddEmail1" TransformationMethod="AddItemToStringCollection">
+      <ClaimsTransformation Id="AddString1" TransformationMethod="AddItemToStringCollection">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="email1" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="item" />
           <InputClaim ClaimTypeReferenceId="result" TransformationClaimType="collection" />
         </InputClaims>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="collection" />
         </OutputClaims>
       </ClaimsTransformation>
-      <ClaimsTransformation Id="AddEmail2" TransformationMethod="AddItemToStringCollection">
+      <ClaimsTransformation Id="AddString2" TransformationMethod="AddItemToStringCollection">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="email2" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="string2" TransformationClaimType="item" />
           <InputClaim ClaimTypeReferenceId="result" TransformationClaimType="collection" />
         </InputClaims>
         <OutputClaims>
@@ -51,21 +53,24 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="email1" DefaultValue="someone@contoso.com" AlwaysUseDefaultValue="true" />
-            <InputClaim ClaimTypeReferenceId="email2" DefaultValue="emily@test.com" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="someone@contoso.com" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="string2" DefaultValue="emily@test.com" AlwaysUseDefaultValue="true" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="email1" />
-            <OutputClaim ClaimTypeReferenceId="email2" />
-            <OutputClaim ClaimTypeReferenceId="result" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="string2" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="AddEmail1" />
-            <OutputClaimsTransformation ReferenceId="AddEmail2" />
+            <OutputClaimsTransformation ReferenceId="AddString1" />
+            <OutputClaimsTransformation ReferenceId="AddString2" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -96,8 +101,8 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="email1" />
-        <OutputClaim ClaimTypeReferenceId="email2" />
+        <OutputClaim ClaimTypeReferenceId="string1" />
+        <OutputClaim ClaimTypeReferenceId="string2" />
         <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />

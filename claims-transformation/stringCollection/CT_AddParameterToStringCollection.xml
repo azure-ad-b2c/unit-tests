@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_GetSingleItemFromStringCollection"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetSingleItemFromStringCollection">
+  PolicyId="B2C_1A_CT_AddParameterToStringCollection"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_AddParameterToStringCollection">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,45 +11,34 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="emails">
-        <DisplayName>Emails</DisplayName>
-        <DataType>stringCollection</DataType>
-      </ClaimType>
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
-        <DataType>string</DataType>
+        <DataType>stringCollection</DataType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="AddEmail1" TransformationMethod="AddParameterToStringCollection">
+      <ClaimsTransformation Id="AddString1" TransformationMethod="AddParameterToStringCollection">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+          <InputClaim ClaimTypeReferenceId="result" TransformationClaimType="collection" />
         </InputClaims>
         <InputParameters>
           <InputParameter Id="item" DataType="string" Value="emily@contoso.com" />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="collection" />
         </OutputClaims>
       </ClaimsTransformation>
-      <ClaimsTransformation Id="AddEmail2" TransformationMethod="AddParameterToStringCollection">
+
+      <ClaimsTransformation Id="AddString2" TransformationMethod="AddParameterToStringCollection">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+          <InputClaim ClaimTypeReferenceId="result" TransformationClaimType="collection" />
         </InputClaims>
         <InputParameters>
           <InputParameter Id="item" DataType="string" Value="someone@test.com" />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
-        </OutputClaims>
-      </ClaimsTransformation>
-      <ClaimsTransformation Id="GetFirstEmail" TransformationMethod="GetSingleItemFromStringCollection">
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
-        </InputClaims>
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="extractedItem" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="collection" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -63,13 +52,11 @@
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="emails" />
             <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="AddEmail1" />
-            <OutputClaimsTransformation ReferenceId="AddEmail2" />
-            <OutputClaimsTransformation ReferenceId="GetFirstEmail" />
+            <OutputClaimsTransformation ReferenceId="AddString1" />
+            <OutputClaimsTransformation ReferenceId="AddString2" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -100,7 +87,6 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="emails" />
         <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
