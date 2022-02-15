@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_CT_GenerateJson"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GenerateJson">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+
+    <ClaimsSchema>
+      <ClaimType Id="boolean1">
+        <DisplayName>Boolean value</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="True" Value="true" />
+          <Enumeration Text="False" Value="false" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="dateTime1">
+        <DisplayName>Date value</DisplayName>
+        <DataType>dateTime</DataType>
+        <UserInputType>DateTimeDropdown</UserInputType>
+      </ClaimType>
+      <ClaimType Id="int1">
+        <DisplayName>Int value</DisplayName>
+        <DataType>int</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="long1">
+        <DisplayName>Long value</DisplayName>
+        <DataType>long</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="string1">
+        <DisplayName>String value</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="result">
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GenerateJsonPayload" TransformationMethod="GenerateJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="boolean1" TransformationClaimType="customerEntity.BooleanClaim" />
+          <InputClaim ClaimTypeReferenceId="dateTime1" TransformationClaimType="customerEntity.DateTimeClaim" />
+          <InputClaim ClaimTypeReferenceId="int1" TransformationClaimType="customerEntity.IntClaim" />
+          <InputClaim ClaimTypeReferenceId="long1" TransformationClaimType="customerEntity.LongClaim" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="customerEntity.StringClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="customerEntity.properties.FixedString" DataType="string" Value="Administrator" />
+          <InputParameter Id="customerEntity.properties.FixedLong" DataType="long" Value="123456789" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="long1" DefaultValue="123456" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="boolean1" />
+            <OutputClaim ClaimTypeReferenceId="dateTime1" />
+            <OutputClaim ClaimTypeReferenceId="int1" />
+            <OutputClaim ClaimTypeReferenceId="string1" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GenerateJsonPayload" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="boolean1" />
+        <OutputClaim ClaimTypeReferenceId="dateTime1" />
+        <OutputClaim ClaimTypeReferenceId="int1" />
+        <OutputClaim ClaimTypeReferenceId="long1" DefaultValue="0" />
+        <OutputClaim ClaimTypeReferenceId="string1" />
+        <OutputClaim ClaimTypeReferenceId="result" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

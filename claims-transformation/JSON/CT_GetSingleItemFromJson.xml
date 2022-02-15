@@ -14,14 +14,17 @@
       <ClaimType Id="inputJson">
         <DisplayName>Input JSON</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="resultKey">
-        <DisplayName>Result key</DisplayName>
+        <DisplayName>The 'key' result of this claims transformation (resultKey)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
       <ClaimType Id="resultValue">
-        <DisplayName>Result value</DisplayName>
+        <DisplayName>The 'value' result of this claims transformation (resultValue)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -42,20 +45,40 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="inputJson" DefaultValue='{"givenName": "Emilty", "lastName": "Smith"}' />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="inputJson" />
-            <OutputClaim ClaimTypeReferenceId="resultKey" />
-            <OutputClaim ClaimTypeReferenceId="resultValue" />
+            <OutputClaim ClaimTypeReferenceId="inputJson" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetKeyValueFromJson" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="resultKey" />
+            <InputClaim ClaimTypeReferenceId="resultValue" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="resultKey" />
+            <DisplayClaim ClaimTypeReferenceId="resultValue" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -70,7 +93,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>

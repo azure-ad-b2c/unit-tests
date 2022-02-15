@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_CT_GetClaimFromJson"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetClaimFromJson">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="inputJson">
+        <DisplayName>Input JSON (inputJson)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="resultDisplayName">
+        <DisplayName>The 'displayName' result of this claims transformation (resultDisplayName)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="resultEmail">
+        <DisplayName>The 'email' result of this claims transformation (resultEmail)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="resultGivenName">
+        <DisplayName>The 'givenName' result of this claims transformation (resultGivenName)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="resultSurname">
+        <DisplayName>The 'surname' result of this claims transformation (resultSurname)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GetDisplayNameClaimFromJson" TransformationMethod="GetClaimFromJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputJson" TransformationClaimType="inputJson" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="claimToExtract" DataType="string" Value="displayName" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="resultDisplayName" TransformationClaimType="extractedClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="GetEmailClaimFromJson" TransformationMethod="GetClaimFromJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputJson" TransformationClaimType="inputJson" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="claimToExtract" DataType="string" Value="email" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="resultEmail" TransformationClaimType="extractedClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="GetGivenNameClaimFromJson" TransformationMethod="GetClaimFromJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputJson" TransformationClaimType="inputJson" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="claimToExtract" DataType="string" Value="givenName" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="resultGivenName" TransformationClaimType="extractedClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="GetSurnameClaimFromJson" TransformationMethod="GetClaimFromJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputJson" TransformationClaimType="inputJson" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="claimToExtract" DataType="string" Value="surname" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="resultSurname" TransformationClaimType="extractedClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="inputJson" DefaultValue='{"email": "someone@example.com", "displayName": "Emily Smith", "givenName": "Emily", "surname": "Smith"}' />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="inputJson" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetDisplayNameClaimFromJson" />
+            <OutputClaimsTransformation ReferenceId="GetEmailClaimFromJson" />
+            <OutputClaimsTransformation ReferenceId="GetGivenNameClaimFromJson" />
+            <OutputClaimsTransformation ReferenceId="GetSurnameClaimFromJson" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="resultDisplayName" />
+            <InputClaim ClaimTypeReferenceId="resultEmail" />
+            <InputClaim ClaimTypeReferenceId="resultGivenName" />
+            <InputClaim ClaimTypeReferenceId="resultSurname" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="resultDisplayName" />
+            <DisplayClaim ClaimTypeReferenceId="resultEmail" />
+            <DisplayClaim ClaimTypeReferenceId="resultGivenName" />
+            <DisplayClaim ClaimTypeReferenceId="resultSurname" />
+          </DisplayClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="inputJson" />
+        <OutputClaim ClaimTypeReferenceId="resultDisplayName" />
+        <OutputClaim ClaimTypeReferenceId="resultEmail" />
+        <OutputClaim ClaimTypeReferenceId="resultGivenName" />
+        <OutputClaim ClaimTypeReferenceId="resultSurname" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

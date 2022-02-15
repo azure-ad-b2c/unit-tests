@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_GetSingleValueFromJsonArray"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetSingleValueFromJsonArray">
+  PolicyId="B2C_1A_CT_CreateJsonArray"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_CreateJsonArray">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,23 +11,25 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="inputJson">
-        <DisplayName>Input JSON</DisplayName>
+      <ClaimType Id="string1">
+        <DisplayName>String 1</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="GetFirstItemFromJson" TransformationMethod="GetSingleValueFromJsonArray">
+      <ClaimsTransformation Id="CreateJsonPayload" TransformationMethod="CreateJsonArray">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="inputJson" TransformationClaimType="inputJsonClaim" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim" />
         </InputClaims>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="extractedClaim" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -37,19 +39,38 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="inputJson" DefaultValue='["someone@example.com", "Someone", 6353399]' />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="someone@contoso.com" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="inputJson" />
-            <OutputClaim ClaimTypeReferenceId="result" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetFirstItemFromJson" />
+            <OutputClaimsTransformation ReferenceId="CreateJsonPayload" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -64,7 +85,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -79,7 +105,6 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="inputJson" />
         <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
