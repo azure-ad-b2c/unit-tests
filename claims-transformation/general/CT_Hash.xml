@@ -14,14 +14,17 @@
       <ClaimType Id="stringToHash">
         <DisplayName>stringToHash</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="salt">
         <DisplayName>salt</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="hashValue">
-        <DisplayName>hashValue</DisplayName>
+      <ClaimType Id="result">
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
     <ClaimsTransformations>
@@ -31,10 +34,10 @@
           <InputClaim ClaimTypeReferenceId="salt" TransformationClaimType="salt" />
         </InputClaims>
         <InputParameters>
-          <InputParameter Id="randomizerSecret" DataType="string" Value="B2C_1A_hashSecret" />
+          <InputParameter Id="randomizerSecret" DataType="string" Value="B2C_1A_12345Secret" />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="hashValue" TransformationClaimType="hash" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="hash" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -44,21 +47,40 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="stringToHash" DefaultValue="Hello world" />
             <InputClaim ClaimTypeReferenceId="salt" DefaultValue="mySaltValue" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="stringToHash" />
-            <OutputClaim ClaimTypeReferenceId="salt" />
-            <OutputClaim ClaimTypeReferenceId="hashValue" />
+            <OutputClaim ClaimTypeReferenceId="stringToHash" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="salt" Required="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GenerateHash" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -73,7 +95,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -90,7 +117,7 @@
         <!-- Unit test claims-->
         <OutputClaim ClaimTypeReferenceId="stringToHash" />
         <OutputClaim ClaimTypeReferenceId="salt" />
-        <OutputClaim ClaimTypeReferenceId="hashValue" />
+        <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

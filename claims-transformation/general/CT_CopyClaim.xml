@@ -14,18 +14,22 @@
       <ClaimType Id="int1">
         <DisplayName>int 1</DisplayName>
         <DataType>int</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="int2">
-        <DisplayName>int 2</DisplayName>
+      <ClaimType Id="int1Result">
+        <DisplayName>The Integer result of this claims transformation (int1Result)</DisplayName>
         <DataType>int</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
       <ClaimType Id="string1">
         <DisplayName>String 1</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="string2">
-        <DisplayName>String 2</DisplayName>
+      <ClaimType Id="string1Result">
+        <DisplayName>The String result of this claims transformation (string1Result)</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
@@ -35,7 +39,7 @@
           <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim" />
         </InputClaims>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="string2" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="string1Result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
 
@@ -44,7 +48,7 @@
           <InputClaim ClaimTypeReferenceId="int1" TransformationClaimType="inputClaim" />
         </InputClaims>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="int2" TransformationClaimType="outputClaim" />
+          <OutputClaim ClaimTypeReferenceId="int1Result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -54,23 +58,43 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="int1" DefaultValue="123456789" />
             <InputClaim ClaimTypeReferenceId="string1" DefaultValue="Helo world" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="int1" />
-            <OutputClaim ClaimTypeReferenceId="int2" />
             <OutputClaim ClaimTypeReferenceId="string1" />
-            <OutputClaim ClaimTypeReferenceId="string2" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CopyInt" />
             <OutputClaimsTransformation ReferenceId="CopyString" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="int1Result" />
+            <InputClaim ClaimTypeReferenceId="string1Result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="int1Result" />
+            <DisplayClaim ClaimTypeReferenceId="string1Result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -85,7 +109,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -101,9 +130,9 @@
 
         <!-- Unit test claims-->
         <OutputClaim ClaimTypeReferenceId="int1" />
-        <OutputClaim ClaimTypeReferenceId="int2" />
+        <OutputClaim ClaimTypeReferenceId="int1Result" />
         <OutputClaim ClaimTypeReferenceId="string1" />
-        <OutputClaim ClaimTypeReferenceId="string2" />
+        <OutputClaim ClaimTypeReferenceId="string1Result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

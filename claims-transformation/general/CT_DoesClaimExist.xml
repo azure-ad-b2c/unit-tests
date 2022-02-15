@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CT_DoesClaimExist" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_DoesClaimExist">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="boolean1">
+        <DisplayName>Boolean value</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>TextBox</UserInputType>
+        <Restriction>
+          <Enumeration Text="True" Value="true" />
+          <Enumeration Text="False" Value="false" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="boolean1Result">
+        <DisplayName>The boolean result of this claims transformation (boolean1Result)</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="date1">
+        <DisplayName>Date value</DisplayName>
+        <DataType>date</DataType>
+        <UserInputType>DateTimeDropdown</UserInputType>
+      </ClaimType>
+      <ClaimType Id="date1Result">
+        <DisplayName>The date result of this claims transformation (date1Result)</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="int1">
+        <DisplayName>Int value</DisplayName>
+        <DataType>int</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="int1Result">
+        <DisplayName>The int result of this claims transformation (int1Result)</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="long1">
+        <DisplayName>Long value</DisplayName>
+        <DataType>long</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="long1Result">
+        <DisplayName>The long result of this claims transformation (long1Result)</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="string1">
+        <DisplayName>String value</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="string1Result">
+        <DisplayName>The string result of this claims transformation (string1Result)</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="stringCollection1">
+        <DisplayName>stringCollection value</DisplayName>
+        <DataType>stringCollection</DataType>
+      </ClaimType>
+      <ClaimType Id="stringCollection1Result">
+        <DisplayName>The stringCollection result of this claims transformation (stringCollection1Result)</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CheckBoolean" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="boolean1" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="boolean1Result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CheckDate" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="date1" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="date1Result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CheckInt" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="int1" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="int1Result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CheckLong" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="long1" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="long1Result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CheckString" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="string1Result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CheckStringCollection" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="stringCollection1" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="stringCollection1Result" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="boolean1" />
+            <OutputClaim ClaimTypeReferenceId="date1" />
+            <OutputClaim ClaimTypeReferenceId="int1" />
+            <OutputClaim ClaimTypeReferenceId="string1" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CheckBoolean" />
+            <OutputClaimsTransformation ReferenceId="CheckDate" />
+            <OutputClaimsTransformation ReferenceId="CheckInt" />
+            <OutputClaimsTransformation ReferenceId="CheckLong" />
+            <OutputClaimsTransformation ReferenceId="CheckString" />
+            <OutputClaimsTransformation ReferenceId="CheckStringCollection" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="boolean1Result" />
+            <InputClaim ClaimTypeReferenceId="date1Result" />
+            <InputClaim ClaimTypeReferenceId="int1Result" />
+            <InputClaim ClaimTypeReferenceId="long1Result" />
+            <InputClaim ClaimTypeReferenceId="string1Result" />
+            <InputClaim ClaimTypeReferenceId="stringCollection1Result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="boolean1Result" />
+            <DisplayClaim ClaimTypeReferenceId="date1Result" />
+            <DisplayClaim ClaimTypeReferenceId="int1Result" />
+            <DisplayClaim ClaimTypeReferenceId="long1Result" />
+            <DisplayClaim ClaimTypeReferenceId="string1Result" />
+            <DisplayClaim ClaimTypeReferenceId="stringCollection1Result" />
+          </DisplayClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+
+        <!-- Unit test claims-->
+        <!-- <OutputClaim ClaimTypeReferenceId="string1" />
+        <OutputClaim ClaimTypeReferenceId="string1Result" />
+        <OutputClaim ClaimTypeReferenceId="int1" />
+        <OutputClaim ClaimTypeReferenceId="int1Result" />
+        <OutputClaim ClaimTypeReferenceId="boolean1" />
+        <OutputClaim ClaimTypeReferenceId="boolean1Result" />
+        <OutputClaim ClaimTypeReferenceId="long1" />
+        <OutputClaim ClaimTypeReferenceId="long1Result" />
+        <OutputClaim ClaimTypeReferenceId="date1" />
+        <OutputClaim ClaimTypeReferenceId="date1Result" />
+        <OutputClaim ClaimTypeReferenceId="stringCollection1" />
+        <OutputClaim ClaimTypeReferenceId="stringCollection1Result" /> -->
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
