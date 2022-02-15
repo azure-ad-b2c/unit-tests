@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_AndClaims"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_AndClaims">
+  PolicyId="B2C_1A_CT_OrClaims"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_OrClaims">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -14,19 +14,30 @@
       <ClaimType Id="boolean1">
         <DisplayName>Boolean 1</DisplayName>
         <DataType>boolean</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="True" Value="true" SelectByDefault="true" />
+          <Enumeration Text="False" Value="false" />
+        </Restriction>
       </ClaimType>
       <ClaimType Id="boolean2">
         <DisplayName>Boolean 2</DisplayName>
         <DataType>boolean</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="True" Value="true" />
+          <Enumeration Text="False" Value="false" SelectByDefault="true" />
+        </Restriction>
       </ClaimType>
       <ClaimType Id="result">
         <DisplayName>The result of this claims transformation (result)</DisplayName>
         <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="AndBooleanClaims" TransformationMethod="AndClaims">
+      <ClaimsTransformation Id="OrBooleanClaims" TransformationMethod="OrClaims">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="boolean1" TransformationClaimType="inputClaim1" />
           <InputClaim ClaimTypeReferenceId="boolean2" TransformationClaimType="inputClaim2" />
@@ -42,20 +53,36 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile">
           <DisplayName>Unit test</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="boolean1" DefaultValue="false" AlwaysUseDefaultValue="true" />
-            <InputClaim ClaimTypeReferenceId="boolean2" DefaultValue="true" AlwaysUseDefaultValue="true" />
-          </InputClaims>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="boolean1" />
             <OutputClaim ClaimTypeReferenceId="boolean2" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="AndBooleanClaims" />
+            <OutputClaimsTransformation ReferenceId="OrBooleanClaims" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -70,7 +97,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
