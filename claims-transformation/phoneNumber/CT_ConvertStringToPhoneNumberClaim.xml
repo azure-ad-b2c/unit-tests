@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_CT_GetNationalNumberAndCountryCodeFromPhoneNumberString"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetNationalNumberAndCountryCodeFromPhoneNumberString">
+  PolicyId="B2C_1A_CT_ConvertStringToPhoneNumberClaim"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_ConvertStringToPhoneNumberClaim">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -11,33 +11,38 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="phoneNumber">
-        <DisplayName>phoneNumber</DisplayName>
+      <ClaimType Id="inputPhoneNumber">
+        <DisplayName>The phone number without country code</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-      <ClaimType Id="resultNationalNumber">
-        <DisplayName>nationalNumber</DisplayName>
+      <ClaimType Id="inputCountryCode">
+        <DisplayName>Country</DisplayName>
         <DataType>string</DataType>
+        <UserHelpText>Country code</UserHelpText>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Brazil(+55)" Value="BR" />
+          <Enumeration Text="Germany(+49)" Value="DE" />
+          <Enumeration Text="United Kingdom(+44)" Value="GB" />
+          <Enumeration Text="United States(+1)" Value="US" />
+        </Restriction>
       </ClaimType>
-      <ClaimType Id="resultCountryCode">
-        <DisplayName>countryCode</DisplayName>
-        <DataType>string</DataType>
+      <ClaimType Id="result">
+        <DisplayName>The result of this claims transformation (result)</DisplayName>
+        <DataType>phoneNumber</DataType>
+        <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="GetNationalNumberAndCountryCodeFromPhoneNumberString" TransformationMethod="GetNationalNumberAndCountryCodeFromPhoneNumberString">
+      <ClaimsTransformation Id="ConvertStringToPhoneNumberWithCountryCode" TransformationMethod="ConvertStringToPhoneNumberClaim">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="phoneNumber" TransformationClaimType="phoneNumber" />
+          <InputClaim ClaimTypeReferenceId="inputPhoneNumber" TransformationClaimType="phoneNumberString" />
+          <InputClaim ClaimTypeReferenceId="inputCountryCode" TransformationClaimType="country" />
         </InputClaims>
-        <InputParameters>
-          <InputParameter Id="throwExceptionOnFailure" DataType="boolean" Value="true" />
-          <InputParameter Id="countryCodeType" DataType="string" Value="ISO3166" />
-        </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="resultNationalNumber" TransformationClaimType="nationalNumber" />
-          <OutputClaim ClaimTypeReferenceId="resultCountryCode" TransformationClaimType="countryCode" />
+          <OutputClaim ClaimTypeReferenceId="result" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -53,15 +58,15 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-            <Item Key="UserMessageIfPhoneNumberParseFailure">Error message if the phone number is not valid.</Item>
+            <Item Key="UserMessageIfClaimsTransformationInvalidPhoneNumber">The phone number is not valid.</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="phoneNumber" DefaultValue="+49 (123) 456-7890" />
+            <InputClaim ClaimTypeReferenceId="inputPhoneNumber" DefaultValue="123-456-7890"></InputClaim>
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="phoneNumber" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="resultNationalNumber" />
-            <OutputClaim ClaimTypeReferenceId="resultCountryCode" />
+            <OutputClaim ClaimTypeReferenceId="inputCountryCode" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="inputPhoneNumber" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="ExperimentalValidation" />
@@ -74,12 +79,27 @@
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="resultCountryCode" />
-            <OutputClaim ClaimTypeReferenceId="resultNationalNumber" />
+            <OutputClaim ClaimTypeReferenceId="result" />
           </OutputClaims>
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetNationalNumberAndCountryCodeFromPhoneNumberString" />
+            <OutputClaimsTransformation ReferenceId="ConvertStringToPhoneNumberWithCountryCode" />
           </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="result" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="result" />
+          </DisplayClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -94,7 +114,12 @@
             <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
@@ -109,9 +134,9 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="phoneNumber" />
-        <OutputClaim ClaimTypeReferenceId="resultCountryCode" />
-        <OutputClaim ClaimTypeReferenceId="resultNationalNumber" />
+        <OutputClaim ClaimTypeReferenceId="inputPhoneNumber" />
+        <OutputClaim ClaimTypeReferenceId="inputCountryCode" />
+        <OutputClaim ClaimTypeReferenceId="result" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
