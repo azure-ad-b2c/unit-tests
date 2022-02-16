@@ -29,11 +29,10 @@
       <ClaimType Id="EmailBoxType">
         <DisplayName>EmailBox type</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText>Email address that can be used to contact you.</UserHelpText>
         <UserInputType>EmailBox</UserInputType>
-        <Restriction>
+        <!-- <Restriction>
           <Pattern RegularExpression="^[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+(?:\.[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$" HelpText="Please enter a valid email address."/>
-        </Restriction>
+        </Restriction> -->
       </ClaimType>
       <ClaimType Id="DropdownSingleSelectType">
         <DisplayName>DropdownSingleSelect type</DisplayName>
@@ -68,14 +67,11 @@
       <ClaimType Id="DateTimeDropdownType">
         <DisplayName>DateTimeDropdown type</DisplayName>
         <DataType>date</DataType>
-        <AdminHelpText/>
-        <UserHelpText>The date on which you were born.</UserHelpText>
         <UserInputType>DateTimeDropdown</UserInputType>
       </ClaimType>
       <ClaimType Id="ReadonlyType">
-        <DisplayName>Membership number</DisplayName>
+        <DisplayName>Readonly type</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText>Your membership number (read only)</UserHelpText>
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
