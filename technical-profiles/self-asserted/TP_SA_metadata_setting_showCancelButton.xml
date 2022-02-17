@@ -9,23 +9,73 @@
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="string1">
+        <DisplayName>String 1</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="scenario">
+        <DisplayName>Select whether to show cancel button</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Default" Value="Default" />
+          <Enumeration Text="True" Value="True" />
+          <Enumeration Text="False" Value="False" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
   <ClaimsProviders>
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
-        <!--Self-asserted technical profile-->
-        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+
+        <!--Welcome technical profile (first page)-->
+        <TechnicalProfile Id="WelcomeTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="scenario" Required="true" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile-Default">
           <DisplayName>User ID signup</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-            <Item Key="setting.showCancelButton">false</Item>
           </Metadata>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="string1" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
+
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile-True">
+          <Metadata>
+            <Item Key="setting.showCancelButton">true</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="ExperimentalTechnicalProfile-Default" />
+        </TechnicalProfile>
+
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile-False">
+          <Metadata>
+            <Item Key="setting.showCancelButton">false</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="ExperimentalTechnicalProfile-Default" />
+        </TechnicalProfile>
+
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -35,10 +85,50 @@
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+            <ClaimsExchange Id="WelcomeTechnicalProfile" TechnicalProfileReferenceId="WelcomeTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>Default</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile-Default" TechnicalProfileReferenceId="ExperimentalTechnicalProfile-Default" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile-True" TechnicalProfileReferenceId="ExperimentalTechnicalProfile-True" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>False</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile-False" TechnicalProfileReferenceId="ExperimentalTechnicalProfile-False" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>

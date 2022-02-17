@@ -12,16 +12,32 @@
   <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="string1">
-        <DisplayName>string1</DisplayName>
+        <DisplayName>String 1</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="string2">
+        <DisplayName>String 1</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="scenario">
+        <DisplayName>Select the retry limit</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Default" Value="Default" />
+          <Enumeration Text="2" Value="2" SelectByDefault="true" />
+          <Enumeration Text="15" Value="15" />
+        </Restriction>
       </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
       <ClaimsTransformation Id="Assertstring1Andstring2AreEqual" TransformationMethod="AssertStringClaimsAreEqual">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="inputClaim1" />
-          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim2" />
+          <InputClaim ClaimTypeReferenceId="string1" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="string2" TransformationClaimType="inputClaim2" />
         </InputClaims>
         <InputParameters>
           <InputParameter Id="stringComparison" DataType="string" Value="ordinalIgnoreCase" />
@@ -34,20 +50,35 @@
     <ClaimsProvider>
       <DisplayName>Unit tests</DisplayName>
       <TechnicalProfiles>
-        <!--Self-asserted technical profile-->
-        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+
+        <!--Welcome technical profile (first page)-->
+        <TechnicalProfile Id="WelcomeTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="scenario" Required="true" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile-Default">
           <DisplayName>User ID signup</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-            <Item Key="UserMessageIfClaimsTransformationStringsAreNotEqual">You must enter 'test'.</Item>
-            <Item Key="setting.retryLimit">2</Item>
+            <Item Key="UserMessageIfClaimsTransformationStringsAreNotEqual">The string1 must be identical to the string2.</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="test" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="ABC" />
+            <InputClaim ClaimTypeReferenceId="string2" DefaultValue="123" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="displayName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="string2" Required="true" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="ExperimentalValidation" />
@@ -55,12 +86,28 @@
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile-2">
+          <Metadata>
+            <Item Key="setting.retryLimit">2</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="ExperimentalTechnicalProfile-Default" />
+        </TechnicalProfile>
+
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile-15">
+          <Metadata>
+            <Item Key="setting.retryLimit">15</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="ExperimentalTechnicalProfile-Default" />
+        </TechnicalProfile>
+
         <!--Validation technical profile-->
         <TechnicalProfile Id="ExperimentalValidation">
           <DisplayName>Unit test</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="string1" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="Assertstring1Andstring2AreEqual" />
@@ -76,10 +123,50 @@
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+            <ClaimsExchange Id="WelcomeTechnicalProfile" TechnicalProfileReferenceId="WelcomeTechnicalProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>Default</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile-Default" TechnicalProfileReferenceId="ExperimentalTechnicalProfile-Default" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>2</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile-2" TechnicalProfileReferenceId="ExperimentalTechnicalProfile-2" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>15</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile-15" TechnicalProfileReferenceId="ExperimentalTechnicalProfile-15" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
