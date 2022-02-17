@@ -2,6 +2,22 @@
 
 This folder contains unit tests for Azure AD B2C Self-asserted technical profile. For more information, check out the [Define a self-asserted technical profile](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) article.
 
+## Enable remember me (KMSI)
+
+For a sign-in page (type of [unifiedssd and unifiedssd content definitions](https://docs.microsoft.com/azure/active-directory-b2c/contentdefinitions#datauri)), the [setting.enableRememberMe](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile#metadata) metadata controls whether the [keep me sign-in (KMSI)](https://docs.microsoft.com/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#enable-keep-me-signed-in-kmsi) is enabled or not.
+
+To test the user experience, select one of the options (True, or False), then select continue. In the next page, if you selected *True*, the keep me sign-in will appear on the screen.
+
+The unit test defines the following components:
+
+- *WelcomeTechnicalProfile* - welcome page where you can choose between the enable KMSI options.
+- *BlockPageTechnicalProfile* - sign-up block message (we don't want to allow users to sign-in in this unit test)
+- **ExperimentalTechnicalProfile-[option]** is the unit test. This technical profile includes the *SelfAsserted-LocalAccountSignin-Email* from the base policy of the starter pack, and configures the *setting.showSignupLink* metadata.
+- The user journey checks the value of the *scenario* claim (selected on the first page), and directs to the corresponding *ExperimentalTechnicalProfile-[option]* unit test. Note, extra orchestration steps are required since this sample uses the *CombinedSignInAndSignUp* type of orchestration steps that must be followed by *ClaimsExchange* type of orchestration step.
+- The relaying party's **SingleSignOn** element is set to `KeepAliveInDays="30"`.
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_TP_SA_metadata_setting_enableRememberMe/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![policy](../../media/policy.png) [Policy](TP_SA_metadata_setting_enableRememberMe.xml) &nbsp; ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile#metadata)
+
 ## Forgot password link location
 
 Demonstrates the forgot password link [setting.forgotPasswordLinkLocation](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile#metadata) metadata options. The unit test defines the following components:
@@ -86,7 +102,7 @@ To test this user experience, select one of show the continue button options (de
 
 For a sign-in page (type of [unifiedssd and unifiedssd content definitions](https://docs.microsoft.com/azure/active-directory-b2c/contentdefinitions#datauri)), the [setting.showSignupLink](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile#metadata) metadata controls whether the sign-up link is rendered on the unified sign-up or sign-in page.
 
-To test the user experience, select one of the options (Default, True, or False), then select continue. In the next page, if you selected *False*, the sign-up link won't be rendered.
+To test the user experience, select one of the options (True, or False), then select continue. In the next page, if you selected *False*, the sign-up link won't appear on the screen.
 
 The unit test defines the following components:
 
@@ -96,7 +112,3 @@ The unit test defines the following components:
 - The user journey checks the value of the *scenario* claim (selected on the first page), and directs to the corresponding *ExperimentalTechnicalProfile-[option]* unit test. Note, extra orchestration steps are required since this sample uses the *CombinedSignInAndSignUp* type of orchestration steps that must be followed by *ClaimsExchange* type of orchestration step.
 
 ![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_TP_SA_metadata_setting_showSignupLink/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![policy](../../media/policy.png) [Policy](TP_SA_metadata_setting_showSignupLink.xml) &nbsp; ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile#metadata)
-
-## Enable remember me (KMSI)
-
-Coming soon

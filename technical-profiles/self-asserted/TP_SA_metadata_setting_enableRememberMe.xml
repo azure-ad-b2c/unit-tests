@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_TP_SA_metadata_setting_operatingMode"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TP_SA_metadata_setting_showSignupLink">
+  PolicyId="B2C_1A_TP_SA_metadata_setting_enableRememberMe"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TP_SA_metadata_setting_enableRememberMe">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -12,12 +12,12 @@
   <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="scenario">
-        <DisplayName>Select whether to show the sign-up link</DisplayName>
+        <DisplayName>Select whether to enable keep me sign-in</DisplayName>
         <DataType>string</DataType>
         <UserInputType>DropdownSingleSelect</UserInputType>
         <Restriction>
-          <Enumeration Text="True" Value="True" />
-          <Enumeration Text="False" Value="False" SelectByDefault="true" />
+          <Enumeration Text="True" Value="True" SelectByDefault="true" />
+          <Enumeration Text="False" Value="False" />
         </Restriction>
       </ClaimType>
       <ClaimType Id="message">
@@ -48,7 +48,7 @@
         <!--Experimental technical profile (second page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile-True">
           <Metadata>
-            <Item Key="setting.showSignupLink">true</Item>
+            <Item Key="setting.enableRememberMe">True</Item>
           </Metadata>
           <IncludeTechnicalProfile ReferenceId="SelfAsserted-LocalAccountSignin-Email" />
         </TechnicalProfile>
@@ -56,7 +56,7 @@
         <!--Experimental technical profile (second page)-->
         <TechnicalProfile Id="ExperimentalTechnicalProfile-False">
           <Metadata>
-            <Item Key="setting.showSignupLink">false</Item>
+            <Item Key="setting.enableRememberMe">false</Item>
           </Metadata>
           <IncludeTechnicalProfile ReferenceId="SelfAsserted-LocalAccountSignin-Email" />
         </TechnicalProfile>
@@ -169,6 +169,11 @@
 
   <RelyingParty>
     <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <UserJourneyBehaviors>
+      <SingleSignOn Scope="Tenant" KeepAliveInDays="30" />
+      <SessionExpiryType>Absolute</SessionExpiryType>
+      <SessionExpiryInSeconds>1200</SessionExpiryInSeconds>
+    </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
