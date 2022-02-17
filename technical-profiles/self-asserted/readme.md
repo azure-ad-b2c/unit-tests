@@ -96,3 +96,7 @@ The unit test defines the following components:
 - The user journey checks the value of the *scenario* claim (selected on the first page), and directs to the corresponding *ExperimentalTechnicalProfile-[option]* unit test. Note, extra orchestration steps are required since this sample uses the *CombinedSignInAndSignUp* type of orchestration steps that must be followed by *ClaimsExchange* type of orchestration step.
 
 ![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_TP_SA_metadata_setting_showSignupLink/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![policy](../../media/policy.png) [Policy](TP_SA_metadata_setting_showSignupLink.xml) &nbsp; ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile#metadata)
+
+## Enable remember me (KMSI)
+
+Coming soon
