@@ -48,12 +48,13 @@
       <ContentDefinition Id="api.selfasserted">
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.en" />
-          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.es" />
+          <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.selfasserted.es" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
     </ContentDefinitions>
 
     <Localization Enabled="true">
+      
       <LocalizedResources Id="api.selfasserted.en">
         <LocalizedStrings>
           <LocalizedString ElementType="GetLocalizedStringsTransformationClaimType" StringId="email_subject">Contoso account email verification code</LocalizedString>
