@@ -36,11 +36,12 @@
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorCode" DefaultValue="1234" />
             <InputClaim ClaimTypeReferenceId="errorMessage" DefaultValue="Error message to return" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="errorCode" />
-            <OutputClaim ClaimTypeReferenceId="errorMessage" />
+            <OutputClaim ClaimTypeReferenceId="errorCode" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="errorMessage" Required="true" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -79,7 +80,7 @@
             </Precondition>
           </Preconditions>
         </OrchestrationStep>
-
+        
         <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
     </UserJourney>
