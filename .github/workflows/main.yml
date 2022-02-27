@@ -7,7 +7,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: 'Upload TrustFrameworkBase Policy'
-      uses: azure-ad-b2c/deploy-trustframework-policy@v5.2
+      uses: azure-ad-b2c/deploy-trustframework-policy@v5.3Dev
       with:
         folder: "./"
         files: "*"
@@ -15,4 +15,4 @@ jobs:
         clientId: ${{ secrets.clientId }}
         clientSecret: ${{ secrets.clientSecret }}
         renumberSteps: true
-        addStep: true
+        addAppInsightsStep: true
