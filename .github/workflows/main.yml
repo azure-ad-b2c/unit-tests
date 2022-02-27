@@ -7,7 +7,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: 'Upload TrustFrameworkBase Policy'
-      uses: azure-ad-b2c/deploy-trustframework-policy@v5.3Dev
+      uses: azure-ad-b2c/deploy-trustframework-policy@v5.3
       with:
         folder: "./"
         files: "*"
