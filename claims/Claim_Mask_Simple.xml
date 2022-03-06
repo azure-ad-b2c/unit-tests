@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Claim_Mask_Simple" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Claim_Mask_Simple">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="inputPhoneNumber">
+        <DisplayName>Phone number</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="outputPhoneNumber0">
+        <DisplayName>Phone number without mask (outputPhoneNumber0)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="outputPhoneNumber1">
+        <DisplayName>Phone number with 'XXX-XXX-' mask (outputPhoneNumber1)</DisplayName>
+        <DataType>string</DataType>
+        <Mask Type="Simple">XXX-XXX-</Mask>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="outputPhoneNumber2">
+        <DisplayName>Phone number with '**** *** **' mask (outputPhoneNumber2)</DisplayName>
+        <DataType>string</DataType>
+        <Mask Type="Simple">**** *** **</Mask>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="outputPhoneNumber3">
+        <DisplayName>Phone number with '###-###-##' mask (outputPhoneNumber3)</DisplayName>
+        <DataType>string</DataType>
+        <Mask Type="Simple">###-###-##</Mask>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="outputPhoneNumber4">
+        <DisplayName>Phone number with 'abc-def-##' mask (outputPhoneNumber4)</DisplayName>
+        <DataType>string</DataType>
+        <Mask Type="Simple">abc-def-##</Mask>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CopyPhoneNumber0" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputPhoneNumber" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="outputPhoneNumber0" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CopyPhoneNumber1" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputPhoneNumber" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="outputPhoneNumber1" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CopyPhoneNumber2" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputPhoneNumber" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="outputPhoneNumber2" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CopyPhoneNumber3" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputPhoneNumber" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="outputPhoneNumber3" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CopyPhoneNumber4" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputPhoneNumber" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="outputPhoneNumber4" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <!--Experimental technical profile (first page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>User ID signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="inputPhoneNumber" DefaultValue="+11234567890" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="inputPhoneNumber" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CopyPhoneNumber0" />
+            <OutputClaimsTransformation ReferenceId="CopyPhoneNumber1" />
+            <OutputClaimsTransformation ReferenceId="CopyPhoneNumber2" />
+            <OutputClaimsTransformation ReferenceId="CopyPhoneNumber3" />
+            <OutputClaimsTransformation ReferenceId="CopyPhoneNumber4" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="outputPhoneNumber0" />
+            <InputClaim ClaimTypeReferenceId="outputPhoneNumber1" />
+            <InputClaim ClaimTypeReferenceId="outputPhoneNumber2" />
+            <InputClaim ClaimTypeReferenceId="outputPhoneNumber3" />
+            <InputClaim ClaimTypeReferenceId="outputPhoneNumber4" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="outputPhoneNumber0" />
+            <DisplayClaim ClaimTypeReferenceId="outputPhoneNumber1" />
+            <DisplayClaim ClaimTypeReferenceId="outputPhoneNumber2" />
+            <DisplayClaim ClaimTypeReferenceId="outputPhoneNumber3" />
+            <DisplayClaim ClaimTypeReferenceId="outputPhoneNumber4" />
+          </DisplayClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="inputPhoneNumber" />
+        <OutputClaim ClaimTypeReferenceId="outputPhoneNumber0" />
+        <OutputClaim ClaimTypeReferenceId="outputPhoneNumber1" />
+        <OutputClaim ClaimTypeReferenceId="outputPhoneNumber2" />
+        <OutputClaim ClaimTypeReferenceId="outputPhoneNumber3" />
+        <OutputClaim ClaimTypeReferenceId="outputPhoneNumber4" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
