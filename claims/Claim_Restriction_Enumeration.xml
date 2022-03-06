@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Claim_Restriction_Enumeration" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Claim_Restriction_Enumeration">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="Dropdown1">
+        <DisplayName>Dropdown list with fixed values (Dropdown1)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Berlin" Value="Berlin" />
+          <Enumeration Text="London" Value="London" />
+          <Enumeration Text="New York" Value="NewYork" SelectByDefault="true" />
+          <Enumeration Text="New Mexico" Value="NewMexico" />
+          <Enumeration Text="New Delhi" Value="NewDelhi" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="Dropdown2">
+        <DisplayName>Dropdown list with localized values and defaults (Dropdown2)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <!-- Default values-->
+          <Enumeration Text="Berlin (default)" Value="Berlin" />
+          <Enumeration Text="London (default)" Value="London" />
+          <Enumeration Text="New York (default)" Value="NewYork" SelectByDefault="true" />
+          <Enumeration Text="New Mexico (default)" Value="NewMexico" />
+          <Enumeration Text="New Delhi (default)" Value="NewDelhi" />
+        </Restriction>
+      </ClaimType>
+
+      <ClaimType Id="Dropdown3">
+        <DisplayName>Dropdown list with localized values without defaults (Dropdown3)</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ContentDefinitions>
+      <ContentDefinition Id="api.selfasserted">
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.selfasserted.es" />
+          <LocalizedResourcesReference Language="hi" LocalizedResourcesReferenceId="api.selfasserted.hi" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+    </ContentDefinitions>
+
+    <Localization Enabled="true">
+      <!-- <SupportedLanguages DefaultLanguage="en" MergeBehavior="Append">
+        <SupportedLanguage>en</SupportedLanguage>
+        <SupportedLanguage>es</SupportedLanguage>
+      </SupportedLanguages> -->
+
+      <LocalizedResources Id="api.selfasserted.es">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="Dropdown2" TargetCollection="Restriction">
+            <Item Text="Berlina (Berlin)" Value="Berlin" />
+            <Item Text="Londres (London)" Value="London" />
+            <Item Text="Nueva York (New York)" Value="NewYork" />
+            <Item Text="Nuevo Mexico (New Mexico)" Value="NewMexico" SelectByDefault="true" />
+            <Item Text="Nueva Delhi (New Delhi)" Value="NewDelhi" />
+          </LocalizedCollection>
+
+          <LocalizedCollection ElementType="ClaimType" ElementId="Dropdown3" TargetCollection="Restriction">
+            <Item Text="Berlina (Berlin)" Value="Berlin" />
+            <Item Text="Londres (London)" Value="London" />
+            <Item Text="Nueva York (New York)" Value="NewYork" />
+            <Item Text="Nuevo Mexico (New Mexico)" Value="NewMexico" SelectByDefault="true" />
+            <Item Text="Nueva Delhi (New Delhi)" Value="NewDelhi" />
+          </LocalizedCollection>
+        </LocalizedCollections>
+      </LocalizedResources>
+
+      <LocalizedResources Id="api.selfasserted.hi">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="Dropdown2" TargetCollection="Restriction">
+            <Item Text="बर्लिन (Berlin)" Value="Berlin" />
+            <Item Text="लंडन (London)" Value="London" />
+            <Item Text="न्यूयॉर्क (New York)" Value="NewYork" />
+            <Item Text="न्यू मैक्सिको (New Mexico)" Value="NewMexico" />
+            <Item Text="नुएवा दिल्ली (New Delhi)" Value="NewDelhi" SelectByDefault="true" />
+          </LocalizedCollection>
+
+          <LocalizedCollection ElementType="ClaimType" ElementId="Dropdown3" TargetCollection="Restriction">
+            <Item Text="बर्लिन (Berlin)" Value="Berlin" />
+            <Item Text="लंडन (London)" Value="London" />
+            <Item Text="न्यूयॉर्क (New York)" Value="NewYork" />
+            <Item Text="न्यू मैक्सिको (New Mexico)" Value="NewMexico" />
+            <Item Text="नुएवा दिल्ली (New Delhi)" Value="NewDelhi" SelectByDefault="true" />
+          </LocalizedCollection>
+        </LocalizedCollections>
+      </LocalizedResources>
+    </Localization>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <!-- Experimental technical profile -->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>User ID signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="Dropdown1" />
+            <OutputClaim ClaimTypeReferenceId="Dropdown2" />
+            <OutputClaim ClaimTypeReferenceId="Dropdown3" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+
+        <!-- Unit test claims-->
+        <OutputClaim ClaimTypeReferenceId="Dropdown1" />
+        <OutputClaim ClaimTypeReferenceId="Dropdown2" />
+        <OutputClaim ClaimTypeReferenceId="Dropdown3" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
