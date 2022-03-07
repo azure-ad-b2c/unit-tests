@@ -90,7 +90,7 @@
             <InputClaim ClaimTypeReferenceId="OIDCPrompt" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Prompt}" />
             <InputClaim ClaimTypeReferenceId="OIDCResource" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Resource}" />
             <InputClaim ClaimTypeReferenceId="OIDCscope" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:scope}" />
-            <!-- <InputClaim ClaimTypeReferenceId="OIDCstate" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:state}" /> -->
+             <InputClaim ClaimTypeReferenceId="OIDCstate" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:state}" /> >
             <InputClaim ClaimTypeReferenceId="OidcRedirectUri" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:RedirectUri}" />
           </InputClaims>
           <OutputClaims>
@@ -103,7 +103,7 @@
             <OutputClaim ClaimTypeReferenceId="OIDCPrompt" />
             <OutputClaim ClaimTypeReferenceId="OIDCResource" />
             <OutputClaim ClaimTypeReferenceId="OIDCscope" />
-            <!-- <OutputClaim ClaimTypeReferenceId="OIDCstate"  /> -->
+             <OutputClaim ClaimTypeReferenceId="OIDCstate"  /> 
             <OutputClaim ClaimTypeReferenceId="OidcRedirectUri" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
@@ -143,7 +143,7 @@
         <OutputClaim ClaimTypeReferenceId="OIDCPrompt" />
         <OutputClaim ClaimTypeReferenceId="OIDCResource" />
         <OutputClaim ClaimTypeReferenceId="OIDCscope" />
-        <!-- <OutputClaim ClaimTypeReferenceId="OIDCstate"  /> -->
+         <OutputClaim ClaimTypeReferenceId="OIDCstate"  /> 
         <OutputClaim ClaimTypeReferenceId="OidcRedirectUri" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
