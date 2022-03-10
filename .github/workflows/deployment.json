@@ -2,6 +2,78 @@
     "version": "1.0",
     "files": [
         {
+            "path": "Identity-providers/Azure-AD/IDP_AAD_Multi_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000-0000-0000-0000-000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">1d1306cb-40c9-4579-a87d-bb773c1d1ffe</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Azure-AD/IDP_AAD_Multi.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000-0000-0000-0000-000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">1d1306cb-40c9-4579-a87d-bb773c1d1ffe</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Facebook/IDP_Facebook_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">710099446672100</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Facebook/IDP_Facebook.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">710099446672100</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/GitHub/IDP_GitHub_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your GitHub application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">92dea1f4c55c5398b442</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/GitHub/IDP_GitHub.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your GitHub application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">92dea1f4c55c5398b442</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Google/IDP_Google_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Google/IDP_Google.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
+                }
+            ]
+        },
+        {
             "path": "claims/Claim_Mask_Regex.xml"
         },
         {
@@ -213,78 +285,6 @@
         },
         {
             "path": "claims-transformation/stringCollection/CT_StringCollectionContainsClaim.xml"
-        },
-        {
-            "path": "Identity-providers/Azure-AD/IDP_AAD_Multi_AccessToken.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">00000000-0000-0000-0000-000000000000</Item>",
-                    "replace": "<Item Key=\"client_id\">1d1306cb-40c9-4579-a87d-bb773c1d1ffe</Item>"
-                }
-            ]
-        },
-        {
-            "path": "Identity-providers/Azure-AD/IDP_AAD_Multi.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">00000000-0000-0000-0000-000000000000</Item>",
-                    "replace": "<Item Key=\"client_id\">1d1306cb-40c9-4579-a87d-bb773c1d1ffe</Item>"
-                }
-            ]
-        },
-        {
-            "path": "Identity-providers/Facebook/IDP_Facebook_AccessToken.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">00000000000000</Item>",
-                    "replace": "<Item Key=\"client_id\">710099446672100</Item>"
-                }
-            ]
-        },
-        {
-            "path": "Identity-providers/Facebook/IDP_Facebook.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">00000000000000</Item>",
-                    "replace": "<Item Key=\"client_id\">710099446672100</Item>"
-                }
-            ]
-        },
-        {
-            "path": "Identity-providers/GitHub/IDP_GitHub_AccessToken.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">Your GitHub application ID</Item>",
-                    "replace": "<Item Key=\"client_id\">92dea1f4c55c5398b442</Item>"
-                }
-            ]
-        },
-        {
-            "path": "Identity-providers/GitHub/IDP_GitHub.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">Your GitHub application ID</Item>",
-                    "replace": "<Item Key=\"client_id\">92dea1f4c55c5398b442</Item>"
-                }
-            ]
-        },
-        {
-            "path": "Identity-providers/Google/IDP_Google_AccessToken.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
-                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
-                }
-            ]
-        },
-        {
-            "path": "Identity-providers/Google/IDP_Google.xml",
-            "replacements": [
-                {
-                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
-                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
-                }
-            ]
         },
         {
             "path": "technical-profiles/login-NonInteractive/TP_LNI_PasswordExpiration.xml"
