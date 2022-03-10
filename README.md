@@ -35,6 +35,7 @@ Samples are available for the following categories:
   - [Login-NonInteractive](technical-profiles/login-NonInteractive/)
   - [OAuth2 error](technical-profiles/oauth2-error/)
   - [Self-asserted](technical-profiles/self-asserted/)
+- [Identity providers](Identity-providers)
 
 ## Community Help and Support
 

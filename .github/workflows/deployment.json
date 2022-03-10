@@ -1,0 +1,323 @@
+{
+    "version": "1.0",
+    "files": [
+        {
+            "path": "claims/Claim_Mask_Regex.xml"
+        },
+        {
+            "path": "claims/Claim_Mask_Simple.xml"
+        },
+        {
+            "path": "claims/Claim_Restriction_Enumeration.xml"
+        },
+        {
+            "path": "claims/Claim_UserInputTypes_All.xml"
+        },
+        {
+            "path": "claims-resolver/CR_Context.xml"
+        },
+        {
+            "path": "claims-resolver/CR_Culture.xml"
+        },
+        {
+            "path": "claims-resolver/CR_OIDC.xml"
+        },
+        {
+            "path": "claims-resolver/CR_Policy.xml"
+        },
+        {
+            "path": "claims-resolver/CR_SAML.xml"
+        },
+        {
+            "path": "claims-transformation/boolean/CT_AndClaims.xml"
+        },
+        {
+            "path": "claims-transformation/boolean/CT_AssertBooleanClaimIsEqualToValue.xml"
+        },
+        {
+            "path": "claims-transformation/boolean/CT_CompareBooleanClaimToValue.xml"
+        },
+        {
+            "path": "claims-transformation/boolean/CT_NotClaims.xml"
+        },
+        {
+            "path": "claims-transformation/boolean/CT_OrClaims.xml"
+        },
+        {
+            "path": "claims-transformation/date/CT_AssertDateTimeIsGreaterThan.xml"
+        },
+        {
+            "path": "claims-transformation/date/CT_ConvertDateTimeToDateClaim.xml"
+        },
+        {
+            "path": "claims-transformation/date/CT_ConvertDateToDateTimeClaim.xml"
+        },
+        {
+            "path": "claims-transformation/date/CT_DateTimeComparison.xml"
+        },
+        {
+            "path": "claims-transformation/date/CT_GetCurrentDateTime.xml"
+        },
+        {
+            "path": "claims-transformation/date/CT_IsTermsOfUseConsentRequired.xml"
+        },
+        {
+            "path": "claims-transformation/general/CT_CopyClaim.xml"
+        },
+        {
+            "path": "claims-transformation/general/CT_DoesClaimExist.xml"
+        },
+        {
+            "path": "claims-transformation/general/CT_Hash.xml"
+        },
+        {
+            "path": "claims-transformation/integer/CT_AdjustNumber.xml"
+        },
+        {
+            "path": "claims-transformation/integer/CT_AssertNumber.xml"
+        },
+        {
+            "path": "claims-transformation/integer/CT_ConvertNumberToStringClaim.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_CreateJsonArray.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_GenerateJson.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_GetClaimFromJson.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_GetClaimsFromJsonArray.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_GetNumericClaimFromJson.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_GetSingleItemFromJson.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_GetSingleValueFromJsonArray.xml"
+        },
+        {
+            "path": "claims-transformation/json/CT_XmlStringToJsonString.xml"
+        },
+        {
+            "path": "claims-transformation/phoneNumber/CT_ConvertPhoneNumberClaimToString.xml"
+        },
+        {
+            "path": "claims-transformation/phoneNumber/CT_ConvertStringToPhoneNumberClaim.xml"
+        },
+        {
+            "path": "claims-transformation/phoneNumber/CT_ConvertStringToPhoneNumberClaimWithoutCountryCodeClaim.xml"
+        },
+        {
+            "path": "claims-transformation/phoneNumber/CT_GetNationalNumberAndCountryCodeFromPhoneNumberString.xml"
+        },
+        {
+            "path": "claims-transformation/social/CT_AddItemToAlternativeSecurityIdCollection.xml"
+        },
+        {
+            "path": "claims-transformation/social/CT_CreateAlternativeSecurityId.xml"
+        },
+        {
+            "path": "claims-transformation/social/CT_GetIdentityProvidersFromAlternativeSecurityIdCollectionTransformation.xml"
+        },
+        {
+            "path": "claims-transformation/social/CT_RemoveAlternativeSecurityIdByIdentityProvider.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_AssertStringClaimsAreEqual.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_BuildUri.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_ChangeCase.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_CompareClaims.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_CompareClaimToValue.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_CopyClaimIfPredicateMatch.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_CreateOtpSecret.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_CreateRandomString.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_FormatStringMultipleClaims.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_GetLocalizedStringsTransformation.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_GetMappedValueFromLocalizedCollection.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_LookupValue.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_NullClaim.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_ParseDomain.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_SetClaimIfBooleansMatch.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_SetClaimsIfRegexMatch_WithGrouping.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_SetClaimsIfRegexMatch.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_SetClaimsIfStringsAreEqual.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_SetClaimsIfStringsMatch.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_StringContains.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_StringJoin.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_StringReplace.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_StringSplit.xml"
+        },
+        {
+            "path": "claims-transformation/string/CT_StringSubstring.xml"
+        },
+        {
+            "path": "claims-transformation/stringCollection/CT_AddItemToStringCollection.xml"
+        },
+        {
+            "path": "claims-transformation/stringCollection/CT_AddParameterToStringCollection.xml"
+        },
+        {
+            "path": "claims-transformation/stringCollection/CT_GetSingleItemFromStringCollection.xml"
+        },
+        {
+            "path": "claims-transformation/stringCollection/CT_StringCollectionContains.xml"
+        },
+        {
+            "path": "claims-transformation/stringCollection/CT_StringCollectionContainsClaim.xml"
+        },
+        {
+            "path": "Identity-providers/Azure-AD/IDP_AAD_Multi_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000-0000-0000-0000-000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">1d1306cb-40c9-4579-a87d-bb773c1d1ffe</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Azure-AD/IDP_AAD_Multi.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000-0000-0000-0000-000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">1d1306cb-40c9-4579-a87d-bb773c1d1ffe</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Facebook/IDP_Facebook_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">710099446672100</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Facebook/IDP_Facebook.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">710099446672100</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/GitHub/IDP_GitHub_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your GitHub application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">92dea1f4c55c5398b442</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/GitHub/IDP_GitHub.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your GitHub application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">92dea1f4c55c5398b442</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Google/IDP_Google_AccessToken.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
+                }
+            ]
+        },
+        {
+            "path": "Identity-providers/Google/IDP_Google.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
+                }
+            ]
+        },
+        {
+            "path": "technical-profiles/login-NonInteractive/TP_LNI_PasswordExpiration.xml"
+        },
+        {
+            "path": "technical-profiles/oauth2-error/TP_OAuth2_OAuth2Error_TransferSubJourney.xml"
+        },
+        {
+            "path": "technical-profiles/oauth2-error/TP_OAuth2_OAuth2Error.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_enableRememberMe.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_forgotPasswordLinkLocation.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_inputVerificationDelayTimeInMilliseconds.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_operatingMode.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_retryLimit.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_showCancelButton.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_showContinueButton.xml"
+        },
+        {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_setting_showSignupLink.xml"
+        }
+    ]
+}

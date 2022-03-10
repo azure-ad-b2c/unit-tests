@@ -10,7 +10,7 @@ jobs:
       uses: azure-ad-b2c/deploy-trustframework-policy@v5.3
       with:
         folder: "./"
-        files: "*"
+        files: "deployment.json"
         tenant: ${{ secrets.tenant }}
         clientId: ${{ secrets.clientId }}
         clientSecret: ${{ secrets.clientSecret }}
