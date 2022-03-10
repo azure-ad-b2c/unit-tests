@@ -90,7 +90,7 @@
             <InputClaim ClaimTypeReferenceId="OIDCPrompt" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Prompt}" />
             <InputClaim ClaimTypeReferenceId="OIDCResource" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:Resource}" />
             <InputClaim ClaimTypeReferenceId="OIDCscope" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:scope}" />
-             <InputClaim ClaimTypeReferenceId="OIDCstate" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:state}" /> >
+            <InputClaim ClaimTypeReferenceId="OIDCstate" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:state}" />
             <InputClaim ClaimTypeReferenceId="OidcRedirectUri" AlwaysUseDefaultValue="true" DefaultValue="{OIDC:RedirectUri}" />
           </InputClaims>
           <OutputClaims>
