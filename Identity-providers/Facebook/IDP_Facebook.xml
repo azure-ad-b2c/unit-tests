@@ -138,9 +138,6 @@
   </UserJourneys>
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignIn_Custom" />
-    <UserJourneyBehaviors>
-      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="e24e6e4e-b29b-44ef-a6f1-fd1b114fe387" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
-    </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
