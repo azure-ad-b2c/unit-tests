@@ -5,6 +5,15 @@
             "path": "technical-profiles/self-asserted/TP_SA_InputClaims_PrepopulateSignInName.xml"
         },
         {
+            "path": "Identity-providers/MobileID/IDP_MobileId.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">vv4bcaybrpuqi</Item>"
+                }
+            ]
+        },
+        {
             "path": "Identity-providers/Azure-AD/IDP_AAD_Multi_AccessToken.xml",
             "replacements": [
                 {
