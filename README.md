@@ -36,6 +36,7 @@ Samples are available for the following categories:
   - [OAuth2 error](technical-profiles/oauth2-error/)
   - [Self-asserted](technical-profiles/self-asserted/)
 - [Identity providers](Identity-providers)
+- [Session and logout](./session)
 
 ## Community Help and Support
 

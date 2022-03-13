@@ -2,6 +2,12 @@
     "version": "1.0",
     "files": [
         {
+            "path": "session/Session_EnforceIdTokenHintOnLogout.xml"
+        },
+        {
+            "path": "session/Session_KeepAliveInDays.xml"
+        },
+        {
             "path": "technical-profiles/self-asserted/TP_SA_InputClaims_PrepopulateSignInName.xml"
         },
         {
