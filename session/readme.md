@@ -20,18 +20,18 @@ After logout, the user is redirected to the URI specified in the *post_logout_re
 
 To test the experience of the enforce ID token hint on logout feature, follow these steps:
 
-1. Sign-up or sign-in with the [B2C_1A_Session_EnforceIdTokenHintOnLogout](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_KeepAliveInDays/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) policy. Copy the ID token from the <https://jwt.ms> app, you will need it later.
-1. Try to logout with the [B2C_1A_Session_EnforceIdTokenHintOnLogout](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_KeepAliveInDays/oauth2/v2.0/logout?post_logout_redirect_uri=https%3A%2F%2Fjwt.ms%2F) policy without providing the ID token hint. You should see error message similar to the following: *AADB2C90272: The id_token_hint parameter has not been specified in the request. Please provide token and try again.*.
+1. Sign-up or sign-in with the [B2C_1A_Session_EnforceIdTokenHintOnLogout](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_EnforceIdTokenHintOnLogout/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) policy. Copy the ID token from the <https://jwt.ms> app, you will need it later.
+1. Try to logout with the [B2C_1A_Session_EnforceIdTokenHintOnLogout](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_EnforceIdTokenHintOnLogout/oauth2/v2.0/logout?post_logout_redirect_uri=https%3A%2F%2Fjwt.ms%2F) policy without providing the ID token hint. You should see error message similar to the following: *AADB2C90272: The id_token_hint parameter has not been specified in the request. Please provide token and try again.*.
 1. Add the ID token hint to the following URL:
 
     ```http
-    https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_KeepAliveInDays/oauth2/v2.0/logout?post_logout_redirect_uri=https%3A%2F%2Fjwt.ms%2F&id_token_hint=
+    https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_EnforceIdTokenHintOnLogout/oauth2/v2.0/logout?post_logout_redirect_uri=https%3A%2F%2Fjwt.ms%2F&id_token_hint=
     ```
 
     For example:
     
     ```http
-    https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_KeepAliveInDays/oauth2/v2.0/logout?post_logout_redirect_uri=https%3A%2F%2Fjwt.ms%2F&id_token_hint=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIs...
+    https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Session_EnforceIdTokenHintOnLogout/oauth2/v2.0/logout?post_logout_redirect_uri=https%3A%2F%2Fjwt.ms%2F&id_token_hint=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIs...
     ```
 
 1. Copy and run the URL into your browser. This time you should be logout without any problem.
