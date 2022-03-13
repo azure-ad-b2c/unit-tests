@@ -2,6 +2,18 @@
     "version": "1.0",
     "files": [
         {
+            "path": "predicates/Predicate_IncludesCharacters.xml"
+        },
+        {
+            "path": "predicates/Predicate_IsDateRange.xml"
+        },
+        {
+            "path": "predicates/Predicate_IsLengthRange.xml"
+        },
+        {
+            "path": "predicates/Predicate_MatchesRegex.xml"
+        },
+        {
             "path": "session/Session_EnforceIdTokenHintOnLogout.xml"
         },
         {

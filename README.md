@@ -31,6 +31,7 @@ Samples are available for the following categories:
   - [Social accounts](claims-transformation/social/)
   - [String](claims-transformation/string/)
   - [String collection](claims-transformation/stringCollection/)
+- [Predicates](./predicates/)
 - Technical profiles:
   - [Login-NonInteractive](technical-profiles/login-NonInteractive/)
   - [OAuth2 error](technical-profiles/oauth2-error/)

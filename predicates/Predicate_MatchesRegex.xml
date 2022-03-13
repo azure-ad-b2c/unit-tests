@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Predicate_MatchesRegex" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Predicate_MatchesRegex">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="string1">
+        <DisplayName>string1</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+        <PredicateValidationReference Id="StringPredicateValidation" />
+      </ClaimType>
+    </ClaimsSchema>
+
+    <Predicates>
+      <Predicate Id="AllowedAADCharacters" Method="MatchesRegex">
+        <UserHelpText>An invalid character was provided.</UserHelpText>
+        <!--
+            We will allow following cases to pass the regular expression(Please test it in browser console if necessary):
+            From left to right separated by "|":
+            1. One or more characters listed in the first set including the white space.
+            2. Dots as long as it is not followed by character "@". 
+            3. Empty string. 
+            Note: "(^$)" will prevent the error message from showing up when input box is empty, and the length predicate
+            will serve the coverage during the time.
+          -->
+        <Parameters>
+          <Parameter Id="RegularExpression">(^([0-9A-Za-z\d@#$%^&amp;*\-_+=[\]{}|\\:',?/`~"();! ]|(\.(?!@)))+$)|(^$)</Parameter>
+        </Parameters>
+      </Predicate>
+      <Predicate Id="DisallowedWhitespace" Method="MatchesRegex">
+        <UserHelpText>The string must not begin or end with a whitespace character.</UserHelpText>
+        <Parameters>
+          <!--
+            We will allow following cases to pass the regular expression(Please test it in browser console if necessary):
+            From left to right separated by "|":
+            1. Zero or more characters with start or end characters as non white space characters.
+            2. Non white space Characters.
+            3. Empty string.
+            Note: "(^$)" will prevent the error message from showing up when input box is empty, and the length predicate
+            will serve the coverage during the time.
+          -->
+          <Parameter Id="RegularExpression">(^\S.*\S$)|(^\S+$)|(^$)</Parameter>
+        </Parameters>
+      </Predicate>
+    </Predicates>
+
+    <PredicateValidations>
+      <PredicateValidation Id="StringPredicateValidation">
+        <PredicateGroups>
+          <PredicateGroup Id="DisallowedWhitespaceGroup">
+            <PredicateReferences>
+              <PredicateReference Id="DisallowedWhitespace" />
+            </PredicateReferences>
+          </PredicateGroup>
+          <PredicateGroup Id="AllowedAADCharactersGroup">
+            <PredicateReferences>
+              <PredicateReference Id="AllowedAADCharacters" />
+            </PredicateReferences>
+          </PredicateGroup>
+        </PredicateGroups>
+      </PredicateValidation>
+    </PredicateValidations>
+
+    <ContentDefinitions>
+      <ContentDefinition Id="api.selfasserted">
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+    </ContentDefinitions>
+
+    <Localization Enabled="true">
+      <SupportedLanguages DefaultLanguage="en" MergeBehavior="ReplaceAll">
+        <SupportedLanguage>en</SupportedLanguage>
+      </SupportedLanguages>
+      <LocalizedResources Id="api.selfasserted.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="InputValidation" ElementId="StringPredicateValidation" StringId="DisallowedWhitespaceGroup">Predicate group error  (localized):</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="StringPredicateValidation" StringId="AllowedAADCharactersGroup">Predicate group error  (localized):</LocalizedString>
+          <!-- <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">>An invalid character was provided (localized).</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespaceGroup" StringId="HelpText">>The string must not begin or end with a whitespace character (localized).</LocalizedString> -->
+        </LocalizedStrings>
+      </LocalizedResources>
+    </Localization>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <!--Experimental technical profile-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>Local Account Signin</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="string1" Required="true" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
