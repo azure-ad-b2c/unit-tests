@@ -83,10 +83,8 @@
       </SupportedLanguages>
       <LocalizedResources Id="api.selfasserted.en">
         <LocalizedStrings>
-          <LocalizedString ElementType="InputValidation" ElementId="StringPredicateValidation" StringId="DisallowedWhitespaceGroup">Predicate group error  (localized):</LocalizedString>
-          <LocalizedString ElementType="InputValidation" ElementId="StringPredicateValidation" StringId="AllowedAADCharactersGroup">Predicate group error  (localized):</LocalizedString>
-          <!-- <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">>An invalid character was provided (localized).</LocalizedString>
-          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespaceGroup" StringId="HelpText">>The string must not begin or end with a whitespace character (localized).</LocalizedString> -->
+          <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">An invalid character was provided (localized).</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespace" StringId="HelpText">The string must not begin or end with a whitespace character (localized).</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
     </Localization>
