@@ -32,6 +32,16 @@
       <ClaimType Id="string2">
         <DisplayName>String2</DisplayName>
         <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="string2Exists">
+        <DisplayName>String 2 exists</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="string3">
+        <DisplayName>String3</DisplayName>
+        <DataType>string</DataType>
         <UserInputType>CheckboxMultiSelect</UserInputType>
         <Restriction>
           <Enumeration Text="One" Value="One" />
@@ -39,8 +49,8 @@
           <Enumeration Text="Three" Value="Three" />
         </Restriction>
       </ClaimType>
-      <ClaimType Id="string2Exists">
-        <DisplayName>String 2 exists</DisplayName>
+      <ClaimType Id="string3Exists">
+        <DisplayName>String 3 exists</DisplayName>
         <DataType>boolean</DataType>
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
@@ -68,6 +78,15 @@
         </InputClaims>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="string2Exists" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="DoesString3Exist" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="string3" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="string3Exists" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
@@ -99,11 +118,13 @@
           </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="technicalProfileName" DefaultValue="ExperimentalTechnicalProfile_DoNotAllow" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="123" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="technicalProfileName" />
             <OutputClaim ClaimTypeReferenceId="string1" />
             <OutputClaim ClaimTypeReferenceId="string2" />
+            <OutputClaim ClaimTypeReferenceId="string3" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -118,11 +139,13 @@
           </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="technicalProfileName" DefaultValue="ExperimentalTechnicalProfile_Allow" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="string1" DefaultValue="123" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="technicalProfileName" />
             <OutputClaim ClaimTypeReferenceId="string1" />
             <OutputClaim ClaimTypeReferenceId="string2" />
+            <OutputClaim ClaimTypeReferenceId="string3" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -137,14 +160,17 @@
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="DoesString1Exist" />
             <InputClaimsTransformation ReferenceId="DoesString2Exist" />
+            <InputClaimsTransformation ReferenceId="DoesString3Exist" />
           </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="string1Exists" />
             <InputClaim ClaimTypeReferenceId="string2Exists" />
+            <InputClaim ClaimTypeReferenceId="string3Exists" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="string1Exists" />
             <OutputClaim ClaimTypeReferenceId="string2Exists" />
+            <OutputClaim ClaimTypeReferenceId="string3Exists" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
@@ -216,6 +242,8 @@
         <OutputClaim ClaimTypeReferenceId="string1Exists" />
         <OutputClaim ClaimTypeReferenceId="string2" />
         <OutputClaim ClaimTypeReferenceId="string2Exists" />
+        <OutputClaim ClaimTypeReferenceId="string3" />
+        <OutputClaim ClaimTypeReferenceId="string3Exists" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
