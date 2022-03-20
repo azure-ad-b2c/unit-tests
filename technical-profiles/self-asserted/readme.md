@@ -10,9 +10,11 @@ To run the unit test, follow these steps:
 
 1. Run the [B2C_1A_TP_SA_metadata_AllowGenerationOfClaimsWithNullValues](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_TP_SA_metadata_AllowGenerationOfClaimsWithNullValues/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) policy. 
 1. On the first page select the *Allow* scenario, and then select *Continue*.
-1. Leave both string1 and string2 claims empty and select *Continue*. The next page will show you that both the string 1 and the string 2 don't exist, since we allow null values. 
+1. Leave both string1 and string2 claims empty and select *Continue*. The next page will show you that both the string 1 and the string 2 exist. Since we allow null values, Azure AD B2C creates the claims with empty string. 
 1. [B2C_1A_TP_SA_metadata_AllowGenerationOfClaimsWithNullValues](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_TP_SA_metadata_AllowGenerationOfClaimsWithNullValues/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) policy again. This time select the *Don't allow* scenario.
-1. Leave both string1 and string2 claims empty and select *Continue*. The next page will show you that both the string 1 and the string 2 exist, since we don't allow null values both claims contain empty string (and considered to be exited). 
+1. Leave both string1 and string2 claims empty and select *Continue*. The next page will show you that both the string 1 and the string 2 don't exists. Since we don't allow null values, Azure AD B2C will not set the claims (they don't exists in the claims bag). 
+
+Note: The JWT token return by this policy doesn't include claims with empty values. If the string1 or string2 are empty or null, they will not be included in the ID token.
 
 ![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_TP_SA_metadata_AllowGenerationOfClaimsWithNullValues/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![policy](../../media/policy.png) [Policy](TP_SA_metadata_AllowGenerationOfClaimsWithNullValues.xml) &nbsp; ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile#metadata)
 
