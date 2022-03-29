@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_TP_SA_metadata_ClaimsProviderSelectionDisplayType"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TP_SA_metadata_ClaimsProviderSelectionDisplayType">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="scenario">
+        <DisplayName>Select the type of idenity provider selection</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Button" Value="Button" />
+          <Enumeration Text="TextLink" Value="TextLink" SelectByDefault="true" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="message">
+        <DisplayName></DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+      <ClaimType Id="numericUserId">
+        <DisplayName>Numeric User Identity</DisplayName>
+        <DataType>long</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateIssuerUserId" TransformationMethod="ConvertNumberToStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="numericUserId" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="issuerUserId" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <!--Welcome technical profile (first page)-->
+        <TechnicalProfile Id="WelcomeTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="scenario" Required="true" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile_Button">
+          <Metadata>
+            <Item Key="ClaimsProviderSelectionDisplayType">Button</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+        </TechnicalProfile>
+
+        <!--Experimental technical profile (second page)-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile_TextLink">
+          <Metadata>
+            <Item Key="ClaimsProviderSelectionDisplayType">TextLink</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+    <ClaimsProvider>
+      <Domain>google.com</Domain>
+      <DisplayName>Google</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Google-OAuth2">
+          <DisplayName>Google</DisplayName>
+          <Protocol Name="OAuth2" />
+          <Metadata>
+            <Item Key="ProviderName">google</Item>
+            <Item Key="authorization_endpoint">https://accounts.google.com/o/oauth2/auth</Item>
+            <Item Key="AccessTokenEndpoint">https://accounts.google.com/o/oauth2/token</Item>
+            <Item Key="ClaimsEndpoint">https://www.googleapis.com/oauth2/v1/userinfo</Item>
+            <Item Key="scope">email profile</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="client_id">Your Google application ID</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_GoogleSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="google.com" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Google-OAuth2-TextLink">
+          <Metadata>
+            <Item Key="ClaimsProviderSelectionDisplayType">TextLink</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="Google-OAuth2" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <Domain>facebook.com</Domain>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH">
+          <DisplayName>Facebook</DisplayName>
+          <Protocol Name="OAuth2" />
+          <Metadata>
+            <Item Key="ProviderName">facebook</Item>
+            <Item Key="authorization_endpoint">https://www.facebook.com/dialog/oauth</Item>
+            <Item Key="AccessTokenEndpoint">https://graph.facebook.com/oauth/access_token</Item>
+            <Item Key="HttpBinding">GET</Item>
+            <Item Key="UsePolicyInRedirectUri">0</Item>
+            <Item Key="AccessTokenResponseFormat">json</Item>
+
+            <Item Key="client_id">00000000000000</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_FacebookSecret" />
+          </CryptographicKeys>
+          <InputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="first_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="last_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Facebook-OAUTH-TextLink">
+          <Metadata>
+            <Item Key="ClaimsProviderSelectionDisplayType">TextLink</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="Facebook-OAUTH" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+    <ClaimsProvider>
+      <Domain>github.com</Domain>
+      <DisplayName>GitHub</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="GitHub-OAuth2">
+          <DisplayName>GitHub</DisplayName>
+          <Protocol Name="OAuth2" />
+          <Metadata>
+            <Item Key="ProviderName">github.com</Item>
+            <Item Key="authorization_endpoint">https://github.com/login/oauth/authorize</Item>
+            <Item Key="AccessTokenEndpoint">https://github.com/login/oauth/access_token</Item>
+            <Item Key="ClaimsEndpoint">https://api.github.com/user</Item>
+            <Item Key="HttpBinding">GET</Item>
+            <Item Key="scope">read:user user:email</Item>
+            <Item Key="UsePolicyInRedirectUri">0</Item>
+            <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
+            <Item Key="UserAgentForClaimsExchange">CPIM-Basic/{tenant}/{policy}</Item>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">Your GitHub application ID</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_GitHubSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="numericUserId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="github.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateIssuerUserId" />
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="GitHub-OAuth2-TextLink">
+          <Metadata>
+            <Item Key="ClaimsProviderSelectionDisplayType">TextLink</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="GitHub-OAuth2" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="WelcomeTechnicalProfile" TechnicalProfileReferenceId="WelcomeTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Experimental technical profile with Button configuration-->
+        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>Button</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="GoogleExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="GitHubExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="ExperimentalTechnicalProfileExchange_Button" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfileExchange_Button" TechnicalProfileReferenceId="ExperimentalTechnicalProfile_Button" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Social account sign-up or sign-in -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>Button</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <ClaimsExchange Id="GoogleExchange" TechnicalProfileReferenceId="Google-OAuth2" />
+            <ClaimsExchange Id="GitHubExchange" TechnicalProfileReferenceId="GitHub-OAuth2" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Experimental technical profile with Username configuration-->
+        <OrchestrationStep Order="4" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>TextLink</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange_TextLink" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="GoogleExchange_TextLink" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="GitHubExchange_TextLink" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="ExperimentalTechnicalProfileExchange_TextLink" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfileExchange_TextLink" TechnicalProfileReferenceId="ExperimentalTechnicalProfile_TextLink" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Social account sign-up or sign-in -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>scenario</Value>
+              <Value>TextLink</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange_TextLink" TechnicalProfileReferenceId="Facebook-OAUTH-TextLink" />
+            <ClaimsExchange Id="GoogleExchange_TextLink" TechnicalProfileReferenceId="Google-OAuth2-TextLink" />
+            <ClaimsExchange Id="GitHubExchange_TextLink" TechnicalProfileReferenceId="GitHub-OAuth2-TextLink" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange_TextLink" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <UserJourneyBehaviors>
+      <SingleSignOn Scope="Tenant" KeepAliveInDays="30" />
+      <SessionExpiryType>Absolute</SessionExpiryType>
+      <SessionExpiryInSeconds>1200</SessionExpiryInSeconds>
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

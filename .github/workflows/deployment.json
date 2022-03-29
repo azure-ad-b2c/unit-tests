@@ -2,6 +2,23 @@
     "version": "1.0",
     "files": [
         {
+            "path": "technical-profiles/self-asserted/TP_SA_metadata_ClaimsProviderSelectionDisplayType.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">710099446672100</Item>"
+                },
+                {
+                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
+                },
+                {
+                    "find": "<Item Key=\"client_id\">Your GitHub application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">92dea1f4c55c5398b442</Item>"
+                }
+            ]
+        },
+        {
             "path": "technical-profiles/self-asserted/TP_SA_metadata_AllowGenerationOfClaimsWithNullValues.xml"
         },
         {
