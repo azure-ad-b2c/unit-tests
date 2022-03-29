@@ -11,17 +11,17 @@
  <ClaimsProviders>
   <ClaimsProvider>
   <Domain>mobileid.ch</Domain>
-  <DisplayName>Mobile ID</DisplayName>
+  <DisplayName>Mobile-ID</DisplayName>
     <TechnicalProfiles>
       <TechnicalProfile Id="MobileID-OAuth2">
-        <DisplayName>MobileID</DisplayName>
+        <DisplayName>Mobile-ID</DisplayName>
         <Protocol Name="OAuth2" />
         <Metadata>
-          <Item Key="ProviderName">MobileID</Item>
+          <Item Key="ProviderName">Mobile-ID</Item>
           <Item Key="authorization_endpoint">https://m.mobileid.ch/oidc/authorize</Item>
           <Item Key="AccessTokenEndpoint">https://openid.mobileid.ch/token</Item>
           <Item Key="ClaimsEndpoint">https://openid.mobileid.ch/userinfo</Item>
-          <Item Key="scope">openid, phone, mid_location, mid_esign_basic</Item>
+          <Item Key="scope">openid, profile, phone, mid_profile</Item>
           <Item Key="HttpBinding">POST</Item>
           <Item Key="UsePolicyInRedirectUri">false</Item>
           <Item Key="token_endpoint_auth_method">client_secret_post</Item>
@@ -35,9 +35,9 @@
           <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub"/>
           <!-- <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email"/>
           <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name"/>
-          <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name"/>
-          <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/> -->
-          <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="mobileid.com" />
+          <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name"/> -->
+          <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name"/>
+          <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="mobileid.ch" />
           <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
         </OutputClaims>
         <OutputClaimsTransformations>
