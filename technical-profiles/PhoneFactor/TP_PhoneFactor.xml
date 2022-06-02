@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_TP_PhoneFactor" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TP_PhoneFactor">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <!--Self-asserted technical profile-->
+        <TechnicalProfile Id="ExperimentalSetupTechnicalProfile">
+          <DisplayName>User ID signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" Required="true" />
+
+            <!-- Claims from the validation technical profiles -->
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+            <OutputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="accountEnabled" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingEmailAddress" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--PhoneFactor technical profile-->
+        <TechnicalProfile Id="ExperimentalTechnicalProfile">
+          <DisplayName>PhoneFactor</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.PhoneFactorProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.phonefactor</Item>
+            <Item Key="ManualPhoneNumberEntryAllowed">true</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserIdForMFA" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userIdForMFA" PartnerClaimType="UserId" />
+            <InputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="Verified.strongAuthenticationPhoneNumber" PartnerClaimType="Verified.OfficePhone" />
+            <OutputClaim ClaimTypeReferenceId="newPhoneNumberEntered" PartnerClaimType="newPhoneNumberEntered" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange" >
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalSetupTechnicalProfile" TechnicalProfileReferenceId="ExperimentalSetupTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange" >
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalTechnicalProfile" TechnicalProfileReferenceId="ExperimentalTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
