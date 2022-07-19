@@ -22,6 +22,9 @@
             "path": "technical-profiles/self-asserted/TP_SA_metadata_AllowGenerationOfClaimsWithNullValues.xml"
         },
         {
+            "path": "content-definition/CD_PassParams.xml"
+        },
+        {
             "path": "predicates/Predicate_IncludesCharacters.xml"
         },
         {
