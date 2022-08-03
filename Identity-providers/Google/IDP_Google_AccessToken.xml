@@ -34,6 +34,10 @@
         <DisplayName>access_type</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
+      <ClaimType Id="prompt">
+        <DisplayName>prompt</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
     </ClaimsSchema>
   </BuildingBlocks>
 
@@ -60,6 +64,10 @@
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="access_type" PartnerClaimType="access_type" DefaultValue="offline" AlwaysUseDefaultValue="true" />
+
+            <!-- The refresh_token is return only on the first authorization for a given user. Subsequent authorization request doesn't return the refresh_token.
+                 To fix this issue we add the prompt=consent query string parameter to the authorization request-->
+            <InputClaim ClaimTypeReferenceId="prompt" PartnerClaimType="prompt" DefaultValue="consent" AlwaysUseDefaultValue="true" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
