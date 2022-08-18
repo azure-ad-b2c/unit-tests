@@ -34,8 +34,10 @@ Samples are available for the following categories:
 - [Content definitions](./content-definition/)
 - [Predicates](./predicates/)
 - Technical profiles:
+  - [AzureMfa](./technical-profiles/AzureMfa/)
   - [Login-NonInteractive](technical-profiles/login-NonInteractive/)
   - [OAuth2 error](technical-profiles/oauth2-error/)
+  - [OneTimePassword](./technical-profiles/OneTimePassword/)
   - [Self-asserted](technical-profiles/self-asserted/)
 - [Identity providers](Identity-providers)
 - [Session and logout](./session)
