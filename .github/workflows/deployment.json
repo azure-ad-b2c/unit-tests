@@ -19,6 +19,9 @@
             ]
         },
         {
+            "path": "technical-profiles/Restful/TP_Restful_SendClaimsIn_QueryString.xml"
+        },
+        {
             "path": "technical-profiles/self-asserted/TP_SA_metadata_AllowGenerationOfClaimsWithNullValues.xml"
         },
         {

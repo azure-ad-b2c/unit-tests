@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_TP_Restful_SendClaimsIn_QueryString" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TP_Restful_SendClaimsIn_QueryString">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="gender">
+        <DisplayName>Gender</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="count">
+        <DisplayName>Count</DisplayName>
+        <DataType>long</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Unit tests</DisplayName>
+      <TechnicalProfiles>
+        <!--Self-asserted technical profile-->
+        <TechnicalProfile Id="ExperimentalSetupTechnicalProfile">
+          <DisplayName>User ID signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="givenName" DefaultValue="Jessica" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
+
+            <!-- Claims return by the REST API validation technical profile-->
+            <OutputClaim ClaimTypeReferenceId="gender" />
+            <OutputClaim ClaimTypeReferenceId="count" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="ExperimentalTechnicalProfile-GenderiseAPI" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="ExperimentalTechnicalProfile-GenderiseAPI">
+          <DisplayName>API to return Gender based on name</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://api.genderize.io/</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">QueryString</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="name" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="gender" />
+            <OutputClaim ClaimTypeReferenceId="count" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Result technical profile (last page)-->
+        <TechnicalProfile Id="ResultTechnicalProfile">
+          <DisplayName>Unit test</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="count" />
+            <InputClaim ClaimTypeReferenceId="gender" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="count" />
+            <DisplayClaim ClaimTypeReferenceId="gender" />
+          </DisplayClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="UnitTestJourney" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ExperimentalSetupTechnicalProfile" TechnicalProfileReferenceId="ExperimentalSetupTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ResultTechnicalProfile" TechnicalProfileReferenceId="ResultTechnicalProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UnitTestJourney" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="1234" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
