@@ -11,7 +11,7 @@ To test this policy:
 1. Run the [B2C_1A_TP_Restful_SendClaimsIn_QueryString](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_TP_Restful_SendClaimsIn_QueryString/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) policy.
 1. Type a name, or except the default one 'Jessica', and select **Continue**.
 1. The next orchestration step calls the REST API, sending the givenName as a _name_ query string parameter to the API
-1. The next orchestration step renders the result of the API, which includes the _gender_ and the _count_ of the provided name (the probability indicates the certainty of the assigned gender).
+1. The next orchestration step renders the result of the API, which includes the _gender_ and the _count_ (represents the number of data rows examined in order to calculate the response) of the name you typed.
 
 
 The unit test defines the following components:
