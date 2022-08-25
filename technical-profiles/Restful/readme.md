@@ -4,7 +4,7 @@ This folder contains unit tests for the RESTful technical profile. For more info
 
 ## Send claims in query string
 
-This unit test that demonstrates how to send a claim in a query string parameter of the REST api HTTP request. It uses the `<Item Key="SendClaimsIn">QueryString</Item>` metadata. The unit test invokes the <https://api.genderize.io/> API. For more information, check out the <https://genderize.io/> documentation.
+This unit test that demonstrates how to send a claim in a query string parameter of the REST api HTTP request. It uses the `<Item Key="SendClaimsIn">QueryString</Item>` metadata. The unit test invokes the <https://genderize.io/> API. For more information, check out the <https://genderize.io/> documentation.
 
 To test this policy:
 
