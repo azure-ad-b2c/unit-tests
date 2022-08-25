@@ -19,6 +19,9 @@
             ]
         },
         {
+            "path": "claims-resolver/CR_OAuth-KV.xml"
+        },
+        {
             "path": "technical-profiles/Restful/TP_Restful_SendClaimsIn_QueryString.xml"
         },
         {

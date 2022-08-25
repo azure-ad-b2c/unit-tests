@@ -42,6 +42,19 @@ Demonstrates how to use the OIDC claim resolvers with information about the Open
 
 ![live demo](../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CR_OIDC/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&login_hint=someone@contoso.com&domain_hint=facebook.com&acr_values=mfa&max_age=1234) &nbsp; ![Quick deploy](../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![policy](../media/policy.png) [Policy](CR_OIDC.xml) &nbsp; ![documentation](../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/claim-resolver-overview#openid-connect)
 
+## OAuth2 key-values
+
+Demonstrates how to use the OAuth2 key-values resolvers with information from the authorization request **custom** query string parameters. The unit test defines the **ExperimentalTechnicalProfile**  [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile with the following:
+
+- `IncludeClaimResolvingInClaimsHandling` metadata is set to `true`.  
+- `InputClaim` sets the `DefaultValue` to the claim resolver, and also sets the `AlwaysUseDefaultValue` to `true`.
+- `OutputClaim` renders the claims on the screen and returns them back to the next orchestration step.
+
+In the following live demo sample, the authorization request contains two custom query string parameter: `campaignId=holidays&str1=abcd`.
+
+![live demo](../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CR_OAuth_KV/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&campaignId=holidays&str1=abcd) &nbsp; ![Quick deploy](../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/) &nbsp; ![policy](../media/policy.png) [Policy](CR_OAuth-KV.xml) &nbsp; ![documentation](../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/claim-resolver-overview#culture)
+
+
 ## SAML Service provider
 
 Demonstrates how to use the SAML claim resolvers with information about the SAML authorization request. The unit test defines the **ExperimentalTechnicalProfile**  [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile with the following:
