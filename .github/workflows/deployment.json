@@ -19,6 +19,12 @@
             ]
         },
         {
+            "path": "Identity-providers/Custom_IDP/IDP_MyCustomIdp_Oauth2.xml"
+        },
+        {
+            "path": "Identity-providers/Custom_IDP/IDP_MyCustomIdp_OIDC.xml"
+        },
+        {
             "path": "claims-resolver/CR_OAuth-KV.xml"
         },
         {
