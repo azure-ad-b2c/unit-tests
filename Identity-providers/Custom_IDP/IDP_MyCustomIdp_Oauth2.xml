@@ -33,7 +33,7 @@
           <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
         </Metadata>
         <CryptographicKeys>
-          <Key Id="client_secret" StorageReferenceId="B2C_1A_abcd" />
+          <Key Id="client_secret" StorageReferenceId="B2C_1A_CustomIdpSecret" />
         </CryptographicKeys>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
