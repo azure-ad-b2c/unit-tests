@@ -1,7 +1,7 @@
 ﻿<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_IDP_AAD_Multi_AccessToken" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_IDP_AAD_Multi_AccessToken">
+  PolicyId="B2C_1A_IDP_AAD_OIDC_Multi_AccessToken" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_IDP_AAD_OIDC_Multi_AccessToken">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
