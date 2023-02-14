@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_CT_GetClaimsFromJsonArrayV2"
   PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CT_GetClaimsFromJsonArrayV2">
@@ -13,23 +11,29 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <ClaimType Id="inputJson">
-        <DisplayName>Input JSON</DisplayName>
+      <ClaimType Id="inputJson1">
+        <DisplayName>Input JSON 1</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="inputJson2">
+        <DisplayName>Input JSON 2</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="inputJson3">
+        <DisplayName>Input JSON 3</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="inputJson4">
+        <DisplayName>Input JSON 4</DisplayName>
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
       <ClaimType Id="inputJsonStringCollection">
         <DisplayName>Input JSON</DisplayName>
         <DataType>stringCollection</DataType>
-      </ClaimType>
-      <ClaimType Id="typeOfTransformation">
-        <DisplayName>Select the type of transformation</DisplayName>
-        <DataType>string</DataType>
-        <UserInputType>DropdownSingleSelect</UserInputType>
-        <Restriction>
-          <Enumeration Text="Include empty claims" Value="include" SelectByDefault="true" />
-          <Enumeration Text="Don't include empty claims" Value="dontInclude" />
-        </Restriction>
       </ClaimType>
       <ClaimType Id="displayName">
         <DisplayName>The 'string' result of this claims transformation (displayName)</DisplayName>
@@ -54,9 +58,9 @@
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <ClaimsTransformation Id="AddJsonToStringCollection" TransformationMethod="AddItemToStringCollection">
+      <ClaimsTransformation Id="AddJsonToStringCollection1" TransformationMethod="AddItemToStringCollection">
         <InputClaims>
-          <InputClaim ClaimTypeReferenceId="inputJson" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="inputJson1" TransformationClaimType="item" />
           <InputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="collection" />
         </InputClaims>
         <OutputClaims>
@@ -64,6 +68,36 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+      <ClaimsTransformation Id="AddJsonToStringCollection2" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputJson2" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="AddJsonToStringCollection3" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputJson3" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="AddJsonToStringCollection4" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="inputJson4" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      
       <ClaimsTransformation Id="GetClaimsFromJson" TransformationMethod="GetClaimsFromJsonArrayV2">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="inputJsonStringCollection" TransformationClaimType="jsonSource" />
@@ -96,13 +130,23 @@
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="inputJson" DefaultValue='[{"key":"email","value":"someone@example.com"}, {"key":"displayName","value":"Someone"}, {"key":"membershipID","value":6353399}, {"key":"active","value":true}, {"key":"birthDate","value":"2005-01-23T00:00:00Z"}]' />
+            <InputClaim ClaimTypeReferenceId="inputJson1" DefaultValue='{"key":"active","value":true}' />
+            <InputClaim ClaimTypeReferenceId="inputJson2" DefaultValue='{"key":"displayName","value":"Someone"}' />
+            <InputClaim ClaimTypeReferenceId="inputJson3" DefaultValue='{"key":"membershipID","value":6353399}' />
+            <InputClaim ClaimTypeReferenceId="inputJson4" DefaultValue='{"key":"birthDate","value":"2005-01-23T00:00:00Z"}' />
           </InputClaims>
           <DisplayClaims>
-            <DisplayClaim ClaimTypeReferenceId="inputJson" />
+            <DisplayClaim ClaimTypeReferenceId="inputJson1" />
+            <DisplayClaim ClaimTypeReferenceId="inputJson2" />
+            <DisplayClaim ClaimTypeReferenceId="inputJson3" />
+            <DisplayClaim ClaimTypeReferenceId="inputJson4" />
           </DisplayClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="inputJson" />
+            <OutputClaim ClaimTypeReferenceId="inputJson1" />
+            <OutputClaim ClaimTypeReferenceId="inputJson2" />
+            <OutputClaim ClaimTypeReferenceId="inputJson3" />
+            <OutputClaim ClaimTypeReferenceId="inputJson4" />
+
             <OutputClaim ClaimTypeReferenceId="displayName" />
             <OutputClaim ClaimTypeReferenceId="membershipID" />
             <OutputClaim ClaimTypeReferenceId="active" />
@@ -110,7 +154,10 @@
           </OutputClaims>
 
           <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="AddJsonToStringCollection" />
+            <OutputClaimsTransformation ReferenceId="AddJsonToStringCollection1" />
+            <OutputClaimsTransformation ReferenceId="AddJsonToStringCollection2" />
+            <OutputClaimsTransformation ReferenceId="AddJsonToStringCollection3" />
+            <OutputClaimsTransformation ReferenceId="AddJsonToStringCollection4" />
             <OutputClaimsTransformation ReferenceId="GetClaimsFromJson" />
           </OutputClaimsTransformations>
 
@@ -171,7 +218,11 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
 
         <!-- Unit test claims-->
-        <OutputClaim ClaimTypeReferenceId="inputJson" />
+        <OutputClaim ClaimTypeReferenceId="inputJson1" />
+        <OutputClaim ClaimTypeReferenceId="inputJson2" />
+        <OutputClaim ClaimTypeReferenceId="inputJson3" />
+        <OutputClaim ClaimTypeReferenceId="inputJson4" />
+
         <OutputClaim ClaimTypeReferenceId="displayName" />
         <OutputClaim ClaimTypeReferenceId="membershipID" />
         <OutputClaim ClaimTypeReferenceId="active" />
