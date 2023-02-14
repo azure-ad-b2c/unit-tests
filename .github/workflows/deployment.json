@@ -241,6 +241,9 @@
             "path": "claims-transformation/json/CT_GetClaimsFromJsonArray.xml"
         },
         {
+            "path": "claims-transformation/json/CT_GetClaimsFromJsonArrayV2.xml"
+        },
+        {
             "path": "claims-transformation/json/CT_GetNumericClaimFromJson.xml"
         },
         {
