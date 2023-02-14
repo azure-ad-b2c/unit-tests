@@ -46,6 +46,23 @@ Get the `displayName` (string), `membershipID` (int), `active` (boolean), and `b
 
 ![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetClaimsFromJsonArray/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_GetClaimsFromJsonArray.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/json-transformations#getclaimsfromjsonarray)
 
+
+## GetClaimsFromJsonArrayV2
+
+Get the `displayName` (string), `membershipID` (int), `active` (boolean), and `birthDate` (dateTime) from the `inputJson` a string collection JSON elements. The unit test defines the following elements:
+
+- **ExperimentalTechnicalProfile** - [self-asserted](https://docs.microsoft.com/azure/active-directory-b2c/self-asserted-technical-profile) technical profile. This technical profile renders the `inputJson1`, `inputJson2`, `inputJson3`, and `inputJson4`, claims with default JSON (you can change the JSON). Note, if the JSON aren't valid, or an element not found, the policy won't continue to the next step. Select *Continue* the run the validation technical profiles. 
+- Claims transformations:
+  - **AddJsonToStringCollection1** adds the `inputJson1` into the `inputJsonStringCollection` string collection.
+  - **AddJsonToStringCollection2** adds the `inputJson2` into the `inputJsonStringCollection` string collection.
+  - **AddJsonToStringCollection3** adds the `inputJson3` into the `inputJsonStringCollection` string collection.
+  - **AddJsonToStringCollection4** adds the `inputJson4` into the `inputJsonStringCollection` string collection.
+  - **GetClaimsFromJson** - the decrement unit test. It reads the values from the `inputJsonStringCollection` claims 
+
+![live demo](../../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_CT_GetClaimsFromJsonArrayV2/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../../media/policy.png) [Policy](CT_GetClaimsFromJsonArrayV2.xml) &nbsp;  ![documentation](../../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/json-transformations#getclaimsfromjsonarrayv2)
+
+
+
 ## GetNumericClaimFromJson
 
 Gets the **id** element from a JSON data. The result of this unit test is the `result` claim that contains extracted values. The unit test defines the following elements:
