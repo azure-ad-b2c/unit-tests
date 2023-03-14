@@ -34,6 +34,9 @@
             "path": "technical-profiles/self-asserted/TP_SA_metadata_AllowGenerationOfClaimsWithNullValues.xml"
         },
         {
+            "path": "technical-profiles/OneTimePassword/TP_OneTimePassword.xml"
+        },
+        {
             "path": "technical-profiles/OneTimePassword/TP_OneTimePassword_NumCodeGenerationAttempts.xml"
         },
         {
