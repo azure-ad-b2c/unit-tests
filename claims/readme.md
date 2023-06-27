@@ -25,13 +25,13 @@ Provide an email address, then select *Continue*. The *ExperimentalTechnicalProf
 
 ![live demo](../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Claim_Mask_Regex/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../media/policy.png) [Policy](Claim_Mask_Regex.xml) &nbsp;  ![documentation](../media/doc.png) [Documentation](https://docs.microsoft.com/azure/active-directory-b2c/claimsschema#mask)
 
-## Restriction mask
+## Regex restriction pattern
 
 The claim [Regex restriction pattern](https://learn.microsoft.com/en-us/azure/active-directory-b2c/claimsschema#pattern) defines a regular expression that claim must match in order to be valid.
 
 ![live demo](../media/demo.png) [Live demo](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Claim_Restriction_RegularExpression/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) &nbsp; ![Quick deploy](../media/deploy.png) [Quick deploy](https://b2ciefsetupapp.azurewebsites.net/)  &nbsp; ![policy](../media/policy.png) [Policy](Claim_Restriction_RegularExpression.xml) &nbsp;  ![documentation](../media/doc.png) [Documentation](https://learn.microsoft.com/en-us/azure/active-directory-b2c/claimsschema#pattern)
 
-## Restriction enumeration
+## Enumeration restriction 
 
 The claim [Restriction enumeration](https://docs.microsoft.com/azure/active-directory-b2c/claimsschema#enumeration) defines available options for the user to select for a claim in the user interface, such as a value in a CheckboxMultiSelect, DropdownSingleSelect, or RadioSingleSelect. This unit test shows the usage of restriction enumeration in a claim definition and localization.
 
