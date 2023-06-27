@@ -160,6 +160,9 @@
             "path": "claims/Claim_Mask_Simple.xml"
         },
         {
+            "path": "claims/Claim_Restriction_RegularExpression.xml"
+        },
+        {
             "path": "claims/Claim_Restriction_Enumeration.xml"
         },
         {
