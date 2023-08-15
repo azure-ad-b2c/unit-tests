@@ -154,6 +154,15 @@
             ]
         },
         {
+            "path": "Identity-providers/Google/IDP_Google_SelectAccount.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">Your Google application ID</Item>",
+                    "replace": "<Item Key=\"client_id\">1038624651382-kj4eufts3hi7d1j4u51jt5h98edu2s35.apps.googleusercontent.com</Item>"
+                }
+            ]
+        },
+        {
             "path": "claims/Claim_Mask_Regex.xml"
         },
         {
